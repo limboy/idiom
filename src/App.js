@@ -1,24 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
+import { AppProvider } from './hooks/useAppContext';
+import { currentHourTs, nextHourTs } from './utils/date';
+import idiom from './utils/idiom';
+import Nav from './components/Nav';
+
+const config = () => {
+  let localState = JSON.parse(localStorage.getItem('state'));
+  return {
+    startTs: localState.startTs,
+    resetTs: nextHourTs(),
+    answer: idiom.idiomBySeed(currentHourTs()),
+  };
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppProvider config={config()}>
+      <Nav />
+    </AppProvider>
   );
 }
 
