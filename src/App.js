@@ -10,12 +10,13 @@ const config = () => {
     startTs: localState.startTs,
     resetTs: nextHourTs(),
     answer: idiom.idiomBySeed(currentHourTs()),
+    maxRound: 6,
   };
 };
 
 function App() {
   return (
-    <AppProvider config={config()}>
+    <AppProvider config={config()} storeService={localStorage}>
       <Nav />
     </AppProvider>
   );
