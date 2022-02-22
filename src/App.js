@@ -10,7 +10,7 @@ const config = () => {
     startTs: localState.startTs,
     resetTs: nextHourTs(),
     answer: idiom.idiomBySeed(currentHourTs()),
-    maxRound: 6,
+    maxAttempts: 6,
   };
 };
 
