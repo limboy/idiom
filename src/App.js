@@ -7,7 +7,7 @@ import Nav from './components/Nav';
 const config = () => {
   let localState = JSON.parse(localStorage.getItem('state'));
   return {
-    startTs: localState.startTs,
+    startTs: localState ? localState.startTs : null,
     resetTs: nextHourTs(),
     answer: idiom.idiomBySeed(currentHourTs()),
     maxAttempts: 6,

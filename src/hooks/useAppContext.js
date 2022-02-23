@@ -7,10 +7,15 @@ function initState(storeService, config) {
   let state = JSON.parse(storeService.getItem('state'));
   if (!state) {
     let attempts = {
-      history: state.history || [],
-      current:
-        state.current ||
-        config.answer.en.map((letter) => Array(letter.length).fill('_')),
+      history: state ? state.history : [],
+      current: state
+        ? state.current
+        : config.answer.en.map((letter) =>
+            Array(letter.length)
+              .fill(null)
+              .map((_) => '_')
+              .join('')
+          ),
     };
     state = {
       attempts,
@@ -121,24 +126,30 @@ function handleLetter(state, letter) {
   let currentCopy = [...state.attempts.current];
 
   // all filled
-  if (currentCopy.flat().every((letter) => letter !== '_')) {
+  if (
+    currentCopy
+      .join('')
+      .split('')
+      .every((letter) => letter !== '_')
+  ) {
     return state;
   }
 
   for (let i = 0; i < currentCopy.length; i++) {
     if (currentCopy[i].indexOf('_') !== -1) {
       let letters = currentCopy[i].split('');
-      let underscoreIndex = letters.findIndex('_');
+      let underscoreIndex = letters.indexOf('_');
       letters[underscoreIndex] = letter;
       currentCopy[i] = letters.join('');
+      break;
     }
   }
 
-  return update(state, { current: { $set: currentCopy } });
+  return update(state, { attempts: { current: { $set: currentCopy } } });
 }
 
 function reducer(state, action) {
-  switch (action) {
+  switch (action.type) {
     case 'pressLetter':
       let letter = action.payload.letter;
       let newState;

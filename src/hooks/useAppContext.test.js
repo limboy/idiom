@@ -1,0 +1,107 @@
+import { AppProvider, useAppContext } from './useAppContext';
+import { currentHourTs, nextHourTs } from '../utils/date';
+import { render, screen, within } from '@testing-library/react';
+import { useEffect, useRef } from 'react';
+
+const storeService = () => {
+  let _store = {};
+  return {
+    getItem: (key) => _store[key] || null,
+    setItem: (key, value) => (_store[key] = JSON.stringify(value)),
+  };
+};
+
+const appProviderConfig = {
+  maxAttempts: 6,
+  startTs: null,
+  resetTs: nextHourTs(),
+  answer: {
+    en: ['bu', 'li', 'bu', 'qi'],
+    cn: ['不', '离', '不', '弃'],
+  },
+};
+
+test('config should match', () => {
+  let Component = (props) => {
+    let { config } = useAppContext();
+    props.callback(config);
+    return <div></div>;
+  };
+
+  render(
+    <AppProvider config={appProviderConfig} storeService={storeService()}>
+      <Component callback={callback} />
+    </AppProvider>
+  );
+
+  function callback(config) {
+    expect(config.maxAttempts).toBe(appProviderConfig.maxAttempts);
+  }
+});
+
+test('add letter', (done) => {
+  let lettersToBePress = 'ABCDEFGH';
+  let TriggerComponent = (props) => {
+    let lettersRef = useRef(lettersToBePress);
+    let counterRef = useRef(0);
+    let { pressLetter, attempts } = useAppContext();
+    useEffect(() => {
+      if (counterRef.current < lettersRef.current.length) {
+        pressLetter(lettersRef.current.charAt(counterRef.current++));
+      }
+    }, [pressLetter, attempts]);
+    return <div></div>;
+  };
+
+  let ReceiveComponent = (props) => {
+    let { attempts } = useAppContext();
+    let counterRef = useRef(0);
+    if (counterRef.current === 0) {
+    } else {
+      if (counterRef.current === 1) {
+        props.callback1(attempts);
+      } else if (counterRef.current === 2) {
+        props.callback2(attempts);
+      } else if (counterRef.current === 3) {
+        props.callback3(attempts);
+      } else if (counterRef.current === lettersToBePress.length) {
+        props.callback4(attempts);
+        done();
+      }
+    }
+    counterRef.current++;
+    return <div></div>;
+  };
+
+  render(
+    <AppProvider config={appProviderConfig} storeService={storeService()}>
+      <TriggerComponent />
+      <ReceiveComponent
+        callback1={callback1}
+        callback2={callback2}
+        callback3={callback3}
+        callback4={callback4}
+      />
+    </AppProvider>
+  );
+
+  function callback1(attempts) {
+    expect(attempts.current[0].charAt(0)).toBe('A');
+  }
+
+  function callback2(attempts) {
+    expect(attempts.current[0]).toBe('AB');
+  }
+
+  function callback3(attempts) {
+    expect(attempts.current[0]).toBe('AB');
+    expect(attempts.current[1].charAt(0)).toBe('C');
+  }
+
+  function callback4(attempts) {
+    expect(attempts.current[0]).toBe('AB');
+    expect(attempts.current[1]).toBe('CD');
+    expect(attempts.current[2]).toBe('EF');
+    expect(attempts.current[3]).toBe('GH');
+  }
+});
