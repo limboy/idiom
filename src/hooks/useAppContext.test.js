@@ -105,3 +105,77 @@ test('add letter', (done) => {
     expect(attempts.current[3]).toBe('GH');
   }
 });
+
+test('delete letter', (done) => {
+  let lettersToBePress = 'ABCDEFGH';
+  let isDeleting = false;
+  let TriggerComponent = (props) => {
+    let { pressLetter, attempts } = useAppContext();
+    let counterRef = useRef(0);
+    useEffect(() => {
+      if (counterRef.current < lettersToBePress.length && !isDeleting) {
+        pressLetter(lettersToBePress.charAt(counterRef.current++));
+      } else {
+        if (counterRef.current-- >= 0) {
+          isDeleting = true;
+          pressLetter('Backspace');
+          if (counterRef.current < 0) {
+            done();
+          }
+        }
+      }
+    }, [pressLetter, attempts]);
+
+    return <div></div>;
+  };
+
+  let ReceiveComponent = (props) => {
+    let { attempts } = useAppContext();
+    let counterRef = useRef(0);
+    if (isDeleting) {
+      if (counterRef.current === 0) {
+        props.callback1(attempts);
+      } else if (counterRef.current === 1) {
+        props.callback2(attempts);
+      } else if (counterRef.current === 2) {
+        props.callback3(attempts);
+      } else if (counterRef.current === lettersToBePress.length) {
+        props.callback4(attempts);
+      }
+      counterRef.current++;
+    }
+    return <div></div>;
+  };
+
+  function callback1(attempts) {
+    expect(attempts.current[3].charAt(1)).toBe('_');
+  }
+
+  function callback2(attempts) {
+    expect(attempts.current[3]).toBe('__');
+  }
+
+  function callback3(attempts) {
+    expect(attempts.current[3]).toBe('__');
+    expect(attempts.current[2].charAt(1)).toBe('_');
+  }
+
+  function callback4(attempts) {
+    expect(attempts.current[0]).toBe('__');
+    expect(attempts.current[1]).toBe('__');
+    expect(attempts.current[2]).toBe('__');
+    expect(attempts.current[3]).toBe('__');
+  }
+
+  render(
+    <AppProvider config={appProviderConfig} storeService={storeService()}>
+      <TriggerComponent />
+      <ReceiveComponent
+        callback1={callback1}
+        callback2={callback2}
+        callback3={callback3}
+        callback4={callback4}
+      />
+    </AppProvider>
+  );
+});

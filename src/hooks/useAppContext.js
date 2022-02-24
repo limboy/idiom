@@ -79,16 +79,21 @@ function handleDeleteLetter(state) {
     return state;
   }
 
-  let currentCopy = current.slice();
+  let currentCopy = current.slice().map((letters) => letters.split(''));
+  let hasReplaced = false;
   for (let i = currentCopy.length - 1; i >= 0; i--) {
-    if (currentCopy[i].indexOf('_') !== 0) {
-      for (let j = 0; j < currentCopy[i].length; j++) {
-        if (currentCopy[i][j] === '_') {
-          currentCopy[i][j - 1] = '_';
-        }
+    for (let j = currentCopy[i].length - 1; j >= 0; j--) {
+      if (currentCopy[i][j] !== '_') {
+        currentCopy[i][j] = '_';
+        hasReplaced = true;
+        break;
       }
     }
+    if (hasReplaced) {
+      break;
+    }
   }
+  currentCopy = currentCopy.map((letters) => letters.join(''));
 
   return update(state, { attempts: { current: { $set: currentCopy } } });
 }
