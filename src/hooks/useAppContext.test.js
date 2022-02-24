@@ -179,3 +179,83 @@ test('delete letter', (done) => {
     </AppProvider>
   );
 });
+
+test('enter key pressed without enough letters', (done) => {
+  let lettersToBePress = 'ABCDEFG';
+  let enterPressed = false;
+  let TriggerComponent = (props) => {
+    let counterRef = useRef(0);
+    let { pressLetter, attempts } = useAppContext();
+    useEffect(() => {
+      if (counterRef.current < lettersToBePress.length) {
+        pressLetter(lettersToBePress.charAt(counterRef.current++));
+      } else {
+        enterPressed = true;
+        pressLetter('Enter');
+        done();
+      }
+    }, [pressLetter, attempts]);
+    return <div></div>;
+  };
+
+  let ReceiveComponent = (props) => {
+    let { attempts } = useAppContext();
+    props.callback(attempts);
+    return <div></div>;
+  };
+
+  function callback(attempts) {
+    expect(attempts.history.length).toBe(0);
+    expect(enterPressed).toBe(false);
+  }
+
+  render(
+    <AppProvider config={appProviderConfig} storeService={storeService()}>
+      <TriggerComponent />
+      <ReceiveComponent callback={callback} />
+    </AppProvider>
+  );
+});
+
+test('enter key pressed with check result', (done) => {
+  let lettersToBePress = 'BUQUBULA';
+  let enterPressed = false;
+  let TriggerComponent = (props) => {
+    let counterRef = useRef(0);
+    let { pressLetter, attempts } = useAppContext();
+    useEffect(() => {
+      if (counterRef.current < lettersToBePress.length) {
+        pressLetter(lettersToBePress.charAt(counterRef.current++));
+      } else if (!enterPressed) {
+        enterPressed = true;
+        console.log('press enter');
+        pressLetter('Enter');
+      } else {
+        done();
+      }
+    }, [pressLetter, attempts]);
+    return <div></div>;
+  };
+
+  let ReceiveComponent = (props) => {
+    let { attempts } = useAppContext();
+    if (enterPressed) {
+      props.callback(attempts);
+    }
+    return <div></div>;
+  };
+
+  function callback(attempts) {
+    let attempt = attempts.history[0];
+    expect(attempts.history.length).toBe(1);
+    expect(attempt.guess).not.toBeFalsy();
+    expect(attempt.checkResult).not.toBeFalsy();
+  }
+
+  render(
+    <AppProvider config={appProviderConfig} storeService={storeService()}>
+      <TriggerComponent />
+      <ReceiveComponent callback={callback} />
+    </AppProvider>
+  );
+});

@@ -35,13 +35,13 @@ function checkAttempt(attempt, answer) {
   let occupiedLetters = {};
   // used to compare with occupiedLetters
   let answerLetters = {};
-  answer.forEach((letters) =>
-    letters.spilt('').forEach((letter) => {
+  answer.forEach((letters) => {
+    letters.split('').forEach((letter) => {
       answerLetters[letter] = answerLetters[letter] || 0;
       answerLetters[letter] += 1;
       occupiedLetters[letter] = 0;
-    })
-  );
+    });
+  });
 
   // check right position first
   for (let i = 0; i < answer.length; i++) {
@@ -58,7 +58,7 @@ function checkAttempt(attempt, answer) {
   for (let i = 0; i < attempt.length; i++) {
     for (let j = 0; j < attempt[i].length; j++) {
       if (checkResult[i][j] !== '2') {
-        if (answerLetters.flat().indexOf(attempt[i].charAt(j)) !== -1) {
+        if (Object.keys(answerLetters).indexOf(attempt[i].charAt(j)) !== -1) {
           if (occupiedLetters[i][j] < answerLetters[i][j]) {
             occupiedLetters[i][j] += 1;
             checkResult[i][j] = '1';
@@ -107,12 +107,15 @@ function handleEnter(state) {
     return state;
   }
 
+  console.log(current);
   let checkResult = checkAttempt(current, state.config.answer.en);
   newState = update(newState, {
-    history: { $push: [{ guess: current, checkResult }] },
+    attempts: {
+      history: { $push: [{ guess: current, checkResult }] },
+    },
   });
 
-  newState = update(newState, { current: { $set: [] } });
+  newState = update(newState, { attempts: { current: { $set: [] } } });
 
   let hasFiguredOut = checkResult.every((letters) =>
     letters.split('').every((letter) => letter === '2')
@@ -120,7 +123,7 @@ function handleEnter(state) {
 
   if (hasFiguredOut) {
     newState = update(newState, { status: { $set: 'WIN' } });
-  } else if (newState.history.length >= state.maxAttempts) {
+  } else if (newState.attempts.history.length >= state.maxAttempts) {
     newState = update(newState, { status: { $set: 'FAIL' } });
   }
 
