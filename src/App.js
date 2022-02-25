@@ -3,6 +3,7 @@ import { AppProvider } from './hooks/useAppContext';
 import { currentHourTs, nextHourTs } from './utils/date';
 import idiom from './utils/idiom';
 import Nav from './components/Nav';
+import Inner from './components/Inner';
 
 const config = () => {
   let localState = JSON.parse(localStorage.getItem('state'));
@@ -17,7 +18,9 @@ const config = () => {
 function App() {
   return (
     <AppProvider config={config()} storeService={localStorage}>
-      <Nav />
+      <Inner>
+        <Nav></Nav>
+      </Inner>
     </AppProvider>
   );
 }
