@@ -132,7 +132,7 @@ function handleEnter(state) {
 
   if (hasFiguredOut) {
     newState = update(newState, { status: { $set: 'WIN' } });
-  } else if (newState.attempts.history.length >= state.maxAttempts) {
+  } else if (newState.attempts.history.length >= state.config.maxAttempts) {
     newState = update(newState, { status: { $set: 'FAIL' } });
   }
 

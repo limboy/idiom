@@ -12,7 +12,7 @@ const storeService = () => {
 };
 
 const appProviderConfig = {
-  maxAttempts: 6,
+  maxAttempts: 5,
   startTs: null,
   resetTs: nextHourTs(),
   answer: {
@@ -317,6 +317,79 @@ test('check win', (done) => {
     expect(history[0].checkResult).toEqual(lettersCheckResult[0]);
     expect(history[1].guess).toEqual(lettersToBePress[1]);
     expect(history[1].checkResult).toEqual(lettersCheckResult[1]);
+  }
+
+  render(
+    <AppProvider config={appProviderConfig} storeService={storeService()}>
+      <TriggerComponent />
+      <ReceiveComponent callback={callback} />
+    </AppProvider>
+  );
+});
+
+test('check fail', (done) => {
+  let lettersToBePress = [
+    ['BI', 'LU', 'BU', 'LU'],
+    ['BI', 'LU', 'BU', 'LU'],
+    ['BI', 'LU', 'BU', 'LU'],
+    ['BI', 'LU', 'BU', 'LU'],
+    ['BI', 'LU', 'BU', 'LU'],
+  ];
+  let lettersCheckResult = [
+    ['21', '21', '22', '00'],
+    ['21', '21', '22', '00'],
+    ['21', '21', '22', '00'],
+    ['21', '21', '22', '00'],
+    ['21', '21', '22', '00'],
+  ];
+  let finalEnterPressed = false;
+  let hasFinished = false;
+  let currentRound = 0;
+  let TriggerComponent = (props) => {
+    let counterRef = useRef(0);
+    let { pressLetter, attempts, status } = useAppContext();
+    useEffect(() => {
+      if (hasFinished) {
+        return;
+      }
+
+      if (currentRound < lettersToBePress.length) {
+        let currentLetters = lettersToBePress[currentRound].join('').split('');
+        let currentLetter = currentLetters[counterRef.current];
+
+        if (counterRef.current < currentLetters.length) {
+          pressLetter(currentLetter);
+          counterRef.current++;
+        } else {
+          pressLetter('Enter');
+          counterRef.current = 0;
+          currentRound++;
+        }
+      }
+      if (status === 'FAIL') {
+        hasFinished = true;
+        finalEnterPressed = true;
+        done();
+      }
+    }, [pressLetter, attempts, status]);
+    return <div></div>;
+  };
+
+  let ReceiveComponent = (props) => {
+    let { attempts } = useAppContext();
+    if (finalEnterPressed) {
+      props.callback(attempts);
+    }
+    return <div></div>;
+  };
+
+  function callback(attempts) {
+    let history = attempts.history;
+    expect(history.length).toBe(lettersToBePress.length);
+    lettersToBePress.forEach((letters, index) => {
+      expect(history[index].guess).toEqual(lettersToBePress[index]);
+      expect(history[index].checkResult).toEqual(lettersCheckResult[index]);
+    });
   }
 
   render(
