@@ -19,6 +19,6 @@ Current.args = {
 
 export const History = Template.bind({});
 History.args = {
-  letters: ['yi', 'xin', 'er', 'yong'],
+  letters: ['yi', 'xin', 'er', 'yon_'],
   checkResult: ['21', '001', '22', '0120'],
 };

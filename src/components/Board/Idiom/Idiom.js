@@ -6,12 +6,14 @@ const Letter = (props) => {
     ? bgColors[props.checkResult]
     : 'rgb(243 244 246)';
   let textColor = props.checkResult ? 'rgb(243 244 246)' : 'rgb(75 85 99)';
+  // ‎ is an empty character used to keep letter height
+  let letter = props.letter === '_' ? '‎' : props.letter;
   return (
     <div
-      className={`w-full h-full text-center align-middle text-2xl md:text-3xl`}
+      className={`w-full h-full text-center align-middle text-2xl md:text-4xl md:py-2`}
       style={{ backgroundColor: bgColor, color: textColor }}
     >
-      {props.letter.toUpperCase()}
+      {letter.toUpperCase()}
     </div>
   );
 };
@@ -30,7 +32,7 @@ export default function Idiom(props) {
   const column4Width = lettersLengthes[3] / lettersLength;
   return (
     <div
-      className={`w-full max-w-2xl grid  gap-4`}
+      className={`w-full max-w-2xl grid  gap-2 md:gap-4`}
       style={{
         gridTemplateColumns: `${column1Width}fr ${column2Width}fr ${column3Width}fr ${column4Width}fr`,
       }}
@@ -38,6 +40,7 @@ export default function Idiom(props) {
       {props.letters.map((letters, i) => {
         return (
           <div
+            key={i}
             className={`grid`}
             style={{
               gap: '2px',
@@ -49,7 +52,13 @@ export default function Idiom(props) {
               if (props.checkResult) {
                 checkResult = parseInt(props.checkResult[i].charAt(j));
               }
-              return <Letter checkResult={checkResult} letter={letter} />;
+              return (
+                <Letter
+                  key={`${i}-${j}`}
+                  checkResult={checkResult}
+                  letter={letter}
+                />
+              );
             })}
           </div>
         );
