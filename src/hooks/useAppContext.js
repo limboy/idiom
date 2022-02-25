@@ -27,6 +27,7 @@ function initState(storeService, config) {
 }
 
 function checkAttempt(attempt, answer) {
+  attempt = attempt.map((letters) => letters.toLowerCase());
   // 0: not in
   // 1: in
   // 2: in and right position
@@ -58,9 +59,10 @@ function checkAttempt(attempt, answer) {
   for (let i = 0; i < attempt.length; i++) {
     for (let j = 0; j < attempt[i].length; j++) {
       if (checkResult[i][j] !== '2') {
-        if (Object.keys(answerLetters).indexOf(attempt[i].charAt(j)) !== -1) {
-          if (occupiedLetters[i][j] < answerLetters[i][j]) {
-            occupiedLetters[i][j] += 1;
+        let currentLetter = attempt[i].charAt(j);
+        if (Object.keys(answerLetters).indexOf(currentLetter) !== -1) {
+          if (occupiedLetters[currentLetter] < answerLetters[currentLetter]) {
+            occupiedLetters[currentLetter] += 1;
             checkResult[i][j] = '1';
           }
         }

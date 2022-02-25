@@ -250,6 +250,7 @@ test('enter key pressed with check result', (done) => {
     expect(attempts.history.length).toBe(1);
     expect(attempt.guess).not.toBeFalsy();
     expect(attempt.checkResult).not.toBeFalsy();
+    expect(attempt.checkResult).toEqual(['22', '10', '22', '10']);
   }
 
   render(
