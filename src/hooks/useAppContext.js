@@ -109,7 +109,6 @@ function handleEnter(state) {
     return state;
   }
 
-  console.log(current);
   let checkResult = checkAttempt(current, state.config.answer.en);
   newState = update(newState, {
     attempts: {
@@ -117,7 +116,15 @@ function handleEnter(state) {
     },
   });
 
-  newState = update(newState, { attempts: { current: { $set: [] } } });
+  newState = update(newState, {
+    attempts: {
+      current: {
+        $set: current.map((letters) =>
+          Array(letters.length).fill('_').join('')
+        ),
+      },
+    },
+  });
 
   let hasFiguredOut = checkResult.every((letters) =>
     letters.split('').every((letter) => letter === '2')

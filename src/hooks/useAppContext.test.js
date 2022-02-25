@@ -228,7 +228,6 @@ test('enter key pressed with check result', (done) => {
         pressLetter(lettersToBePress.charAt(counterRef.current++));
       } else if (!enterPressed) {
         enterPressed = true;
-        console.log('press enter');
         pressLetter('Enter');
       } else {
         done();
@@ -251,6 +250,73 @@ test('enter key pressed with check result', (done) => {
     expect(attempt.guess).not.toBeFalsy();
     expect(attempt.checkResult).not.toBeFalsy();
     expect(attempt.checkResult).toEqual(['22', '10', '22', '10']);
+  }
+
+  render(
+    <AppProvider config={appProviderConfig} storeService={storeService()}>
+      <TriggerComponent />
+      <ReceiveComponent callback={callback} />
+    </AppProvider>
+  );
+});
+
+test('check win', (done) => {
+  let lettersToBePress = [
+    ['BI', 'LU', 'BU', 'LU'],
+    ['BU', 'LI', 'BU', 'QI'],
+  ];
+  let lettersCheckResult = [
+    ['21', '21', '22', '00'],
+    ['22', '22', '22', '22'],
+  ];
+  let finalEnterPressed = false;
+  let hasFinished = false;
+  let currentRound = 0;
+  let TriggerComponent = (props) => {
+    let counterRef = useRef(0);
+    let { pressLetter, attempts, status } = useAppContext();
+    useEffect(() => {
+      if (hasFinished) {
+        return;
+      }
+
+      if (currentRound < lettersToBePress.length) {
+        let currentLetters = lettersToBePress[currentRound].join('').split('');
+        let currentLetter = currentLetters[counterRef.current];
+
+        if (counterRef.current < currentLetters.length) {
+          pressLetter(currentLetter);
+          counterRef.current++;
+        } else {
+          pressLetter('Enter');
+          counterRef.current = 0;
+          currentRound++;
+        }
+      }
+      if (status === 'WIN') {
+        hasFinished = true;
+        finalEnterPressed = true;
+        done();
+      }
+    }, [pressLetter, attempts, status]);
+    return <div></div>;
+  };
+
+  let ReceiveComponent = (props) => {
+    let { attempts } = useAppContext();
+    if (finalEnterPressed) {
+      props.callback(attempts);
+    }
+    return <div></div>;
+  };
+
+  function callback(attempts) {
+    let history = attempts.history;
+    expect(history.length).toBe(2);
+    expect(history[0].guess).toEqual(lettersToBePress[0]);
+    expect(history[0].checkResult).toEqual(lettersCheckResult[0]);
+    expect(history[1].guess).toEqual(lettersToBePress[1]);
+    expect(history[1].checkResult).toEqual(lettersCheckResult[1]);
   }
 
   render(
