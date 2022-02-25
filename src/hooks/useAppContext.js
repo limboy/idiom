@@ -5,24 +5,22 @@ export const AppContext = React.createContext();
 
 function initState(storeService, config) {
   let state = JSON.parse(storeService.getItem('state'));
-  if (!state) {
-    let attempts = {
-      history: state ? state.history : [],
-      current: state
-        ? state.current
-        : config.answer.en.map((letter) =>
-            Array(letter.length)
-              .fill(null)
-              .map((_) => '_')
-              .join('')
-          ),
-    };
-    state = {
-      attempts,
-      status: '',
-      config,
-    };
-  }
+  let attempts = {
+    history: state ? state.history : [],
+    current: state
+      ? state.current
+      : config.answer.en.map((letter) =>
+          Array(letter.length)
+            .fill(null)
+            .map((_) => '_')
+            .join('')
+        ),
+  };
+  state = {
+    attempts,
+    status: '',
+    config,
+  };
   return state;
 }
 

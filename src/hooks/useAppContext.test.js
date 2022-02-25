@@ -1,6 +1,6 @@
 import { AppProvider, useAppContext } from './useAppContext';
-import { currentHourTs, nextHourTs } from '../utils/date';
-import { render, screen, within } from '@testing-library/react';
+import { nextHourTs } from '../utils/date';
+import { render } from '@testing-library/react';
 import { useEffect, useRef } from 'react';
 
 const storeService = () => {
@@ -396,6 +396,51 @@ test('check fail', (done) => {
     <AppProvider config={appProviderConfig} storeService={storeService()}>
       <TriggerComponent />
       <ReceiveComponent callback={callback} />
+    </AppProvider>
+  );
+});
+
+test('init with local state', (done) => {
+  let state = {
+    attempts: {
+      history: [
+        {
+          guess: ['BU', 'QU', 'BU', 'LA'],
+          checkResult: ['22', '10', '22', '10'],
+        },
+      ],
+      current: ['ZI', 'L_', '__', '__'],
+    },
+    status: '',
+  };
+
+  function createStore() {
+    let store = storeService();
+    store.setItem('state', JSON.stringify(state));
+    return store;
+  }
+
+  let Component = (props) => {
+    let { attempts, status } = useAppContext();
+    let callback = props.callback;
+    useEffect(() => {
+      if (attempts) {
+        callback(attempts, status);
+        done();
+      }
+    }, [attempts, callback, status]);
+    return <div></div>;
+  };
+
+  function callback(attempts, status) {
+    expect(attempts.history).toEqual(state.history);
+    expect(attempts.current).toEqual(state.current);
+    expect(status).toEqual(state.status);
+  }
+
+  render(
+    <AppProvider config={appProviderConfig} storeService={createStore()}>
+      <Component callback={callback} />
     </AppProvider>
   );
 });
