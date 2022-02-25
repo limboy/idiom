@@ -1,18 +1,24 @@
 import Nav from '.';
 import Inner from '../Inner';
+import PropTypes from 'prop-types';
 
 const Component = (props) => {
   return (
     <Inner>
-      <Nav />
+      <Nav {...props} />
     </Inner>
   );
 };
 
-export default {
-  title: 'Nav',
-  Component,
+Component.propTypes = {
+  title: PropTypes.string,
 };
 
-export const Wide = () => <Component />;
-export const Small = () => <Component />;
+export default {
+  title: 'Nav',
+  component: Nav,
+};
+
+export const Default = {
+  args: {},
+};

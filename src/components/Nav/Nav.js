@@ -1,5 +1,6 @@
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline';
 import { InformationCircleIcon } from '@heroicons/react/outline';
+import PropTypes from 'prop-types';
 
 export default function Nav(props) {
   return (
@@ -9,7 +10,7 @@ export default function Nav(props) {
       </div>
 
       <div>
-        <h1>拼音猜成语</h1>
+        <h1>{props.title ? props.title : '拼音猜成语'}</h1>
       </div>
 
       <div>
@@ -18,3 +19,8 @@ export default function Nav(props) {
     </div>
   );
 }
+
+Nav.propTypes = {
+  title: PropTypes.string,
+  intro: PropTypes.string,
+};
