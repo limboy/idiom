@@ -5,4 +5,6 @@ export default {
   component: Keyboard,
 };
 
-export const Default = <Keyboard />;
+export const Default = (
+  <Keyboard onKeyPress={(letter) => console.log(letter)} />
+);

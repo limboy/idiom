@@ -1,12 +1,26 @@
+import PropTypes from 'prop-types';
+
 function Button(props) {
   let flexBasis = '100%';
+  let letterValue = props.letter;
   if (props.letter === 'Enter' || props.letter === '⌫') {
     flexBasis = '150%';
+    if (props.letter === '⌫') {
+      letterValue = 'Backspace';
+    }
   }
+
+  function onSelectLetter(event) {
+    let letter = event.target.dataset.value;
+    props.onKeyPress(letter);
+  }
+
   return (
     <button
       className="w-full h-full bg-gray-200 text-gray-800 text-base font-bold py-2 md:py-4"
       style={{ flexBasis }}
+      data-value={letterValue}
+      onClick={onSelectLetter}
     >
       {props.letter}
     </button>
@@ -28,7 +42,7 @@ export default function Keyboard(props) {
           >
             {keys.map((letter, j) => {
               return letter ? (
-                <Button key={`${i}-${j}`} letter={letter} />
+                <Button {...props} key={`${i}-${j}`} letter={letter} />
               ) : (
                 <div key={`${i}-${j}`} style={{ flexBasis: '50%' }}></div>
               );
@@ -39,3 +53,7 @@ export default function Keyboard(props) {
     </div>
   );
 }
+
+Keyboard.propTypes = {
+  onKeyPress: PropTypes.func,
+};
