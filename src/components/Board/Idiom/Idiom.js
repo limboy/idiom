@@ -4,7 +4,7 @@ const Letter = (props) => {
   let bgColors = ['rgb(75 85 99)', 'rgb(202 138 4)', 'rgb(22 163 74)'];
   let bgColor = props.checkResult
     ? bgColors[props.checkResult]
-    : 'rgb(243 244 246)';
+    : 'rgb(229 231 235)';
   let textColor = props.checkResult ? 'rgb(243 244 246)' : 'rgb(75 85 99)';
   // ‎ is an empty character used to keep letter height
   let letter = props.letter === '_' ? '‎' : props.letter;
