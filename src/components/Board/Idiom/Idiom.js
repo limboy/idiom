@@ -1,19 +1,15 @@
 import PropTypes from 'prop-types';
 
 const Letter = (props) => {
-  let bgColors = ['rgb(75 85 99)', 'rgb(202 138 4)', 'rgb(22 163 74)'];
-  let bgColor = props.checkResult
-    ? bgColors[props.checkResult]
-    : 'rgb(229 231 235)';
-  let textColor = props.checkResult ? 'rgb(243 244 246)' : 'rgb(75 85 99)';
-  // ‎ is an empty character used to keep letter height
-  let letter = props.letter === '_' ? '‎' : props.letter;
+  let bgColors = ['bg-gray-600', 'bg-yellow-600', 'bg-green-600'];
+  let bgColor = props.checkResult ? bgColors[props.checkResult] : 'bg-gray-200';
+  let textColor = props.checkResult ? 'text-gray-100' : 'text-gray-600';
+  let visibility = props.letter === '_' ? 'invisible' : 'visible';
   return (
     <div
-      className={`w-full h-full text-center align-middle text-2xl md:text-4xl md:py-2`}
-      style={{ backgroundColor: bgColor, color: textColor }}
+      className={`${bgColor} ${textColor} w-full h-full text-center align-middle text-2xl md:text-4xl md:py-2`}
     >
-      {letter.toUpperCase()}
+      <span className={`${visibility}`}>{props.letter.toUpperCase()}</span>
     </div>
   );
 };
