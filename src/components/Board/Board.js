@@ -1,41 +1,38 @@
-import PropTypes from 'prop-types';
+import { useAppContext } from '../../hooks/useAppContext';
 import Idiom from './Idiom';
+
 export default function Board(props) {
-  let attempts = [];
-  for (let i = 0; i < props.maxAttempts; i++) {
-    if (i < props.history.length) {
-      let attempt = props.history[i];
-      attempts.push({
+  let { attempts, config } = useAppContext();
+  let idioms = [];
+  for (let i = 0; i < config.maxAttempts; i++) {
+    if (i < attempts.history.length) {
+      let attempt = attempts.history[i];
+      idioms.push({
         letters: attempt.guess,
         checkResult: attempt.checkResult,
       });
-    } else if (i === props.history.length) {
-      attempts.push({ letters: props.current });
+    } else if (i === attempts.history.length) {
+      idioms.push({ letters: attempts.current });
     } else {
-      attempts.push({
-        letters: props.current.map((letters) =>
+      idioms.push({
+        letters: attempts.current.map((letters) =>
           Array(letters.length).fill('_').join('')
         ),
       });
     }
   }
+
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col gap-2 md:gap-4">
-      {attempts.map((attempt, i) => {
+      {idioms.map((idiom, i) => {
         return (
           <Idiom
             key={i}
-            letters={attempt.letters}
-            checkResult={attempt.checkResult}
+            letters={idiom.letters}
+            checkResult={idiom.checkResult}
           />
         );
       })}
     </div>
   );
 }
-
-Board.propTypes = {
-  maxAttempts: PropTypes.number,
-  history: PropTypes.array,
-  current: PropTypes.array,
-};
