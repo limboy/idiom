@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 
 const Letter = (props) => {
-  let bgColors = ['bg-gray-600', 'bg-yellow-600', 'bg-green-600'];
-  let bgColor = props.checkResult ? bgColors[props.checkResult] : 'bg-gray-200';
-  let textColor = props.checkResult ? 'text-gray-100' : 'text-gray-600';
+  let bgColors = ['bg-gray-500', 'bg-yellow-600', 'bg-green-600'];
+  let bgColor =
+    props.checkResult !== null ? bgColors[props.checkResult] : 'bg-gray-200';
+  let textColor =
+    props.checkResult !== null ? 'text-gray-100' : 'text-gray-500';
   let visibility = props.letter === '_' ? 'invisible' : 'visible';
   return (
     <div

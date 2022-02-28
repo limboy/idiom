@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
 
 export const AppContext = React.createContext();
@@ -182,9 +182,10 @@ function reducer(state, action) {
 }
 
 export function AppProvider(props) {
+  let storeService = props.storeService;
   let [state, dispatch] = useReducer(
     reducer,
-    initState(props.storeService, props.config)
+    initState(storeService, props.config)
   );
 
   let pressLetter = useCallback(
@@ -198,6 +199,10 @@ export function AppProvider(props) {
     ...state,
     pressLetter,
   };
+
+  useEffect(() => {
+    storeService.setItem('pyccy-state', JSON.stringify(state));
+  }, [state, storeService]);
 
   return <AppContext.Provider value={value} {...props} />;
 }

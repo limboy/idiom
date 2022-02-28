@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 export default function Nav(props) {
   return (
-    <div className="flex flex-row justify-between h-10 border-b border-gray-300 items-center py-2">
+    <div className="flex flex-row justify-between h-10 border-b border-gray-300 items-center py-6">
       <div>
-        <QuestionMarkCircleIcon className="h-5 w-5" />
+        <QuestionMarkCircleIcon className="h-6 w-6" />
       </div>
 
       <div>
@@ -14,7 +14,7 @@ export default function Nav(props) {
       </div>
 
       <div>
-        <InformationCircleIcon className="h-5 w-5" />
+        <InformationCircleIcon className="h-6 w-6" />
       </div>
     </div>
   );
