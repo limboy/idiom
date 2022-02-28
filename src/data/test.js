@@ -14,7 +14,7 @@ export const storeServiceWithNoHistory = () => {
   let _store = {};
   return {
     getItem: (key) => _store[key] || null,
-    setItem: (key, value) => (_store[key] = JSON.stringify(value)),
+    setItem: (key, value) => (_store[key] = value),
   };
 };
 
@@ -33,6 +33,64 @@ export const storeServiceWithSomeHistory = () => {
   };
 
   let store = storeServiceWithNoHistory();
-  store.setItem('pyccy-state', state);
+  store.setItem('pyccy-state', JSON.stringify(state));
+  return store;
+};
+
+export const storeServiceWithFinishWinStatus = () => {
+  let state = {
+    attempts: {
+      history: [
+        {
+          guess: ['BU', 'QU', 'BU', 'LA'],
+          checkResult: ['22', '10', '22', '10'],
+        },
+        {
+          guess: ['BU', 'LI', 'BU', 'QI'],
+          checkResult: ['22', '22', '22', '22'],
+        },
+      ],
+      current: ['__', '__', '__', '__'],
+    },
+    status: 'WIN',
+  };
+
+  let store = storeServiceWithNoHistory();
+  store.setItem('pyccy-state', JSON.stringify(state));
+  return store;
+};
+
+export const storeServiceWithFinishFailStatus = () => {
+  let state = {
+    attempts: {
+      history: [
+        {
+          guess: ['BU', 'QU', 'BU', 'LA'],
+          checkResult: ['22', '10', '22', '10'],
+        },
+        {
+          guess: ['BU', 'QU', 'BU', 'LA'],
+          checkResult: ['22', '10', '22', '10'],
+        },
+        {
+          guess: ['BU', 'QU', 'BU', 'LA'],
+          checkResult: ['22', '10', '22', '10'],
+        },
+        {
+          guess: ['BU', 'QU', 'BU', 'LA'],
+          checkResult: ['22', '10', '22', '10'],
+        },
+        {
+          guess: ['BU', 'QU', 'BU', 'LA'],
+          checkResult: ['22', '10', '22', '10'],
+        },
+      ],
+      current: ['__', '__', '__', '__'],
+    },
+    status: 'FAIL',
+  };
+
+  let store = storeServiceWithNoHistory();
+  store.setItem('pyccy-state', JSON.stringify(state));
   return store;
 };
