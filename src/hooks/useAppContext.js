@@ -6,9 +6,9 @@ export const AppContext = React.createContext();
 function initState(storeService, config) {
   let state = JSON.parse(storeService.getItem('state'));
   let attempts = {
-    history: state ? state.history : [],
+    history: state ? state.attempts.history : [],
     current: state
-      ? state.current
+      ? state.attempts.current
       : config.answer.en.map((letter) =>
           Array(letter.length)
             .fill(null)
@@ -18,7 +18,7 @@ function initState(storeService, config) {
   };
   state = {
     attempts,
-    status: '',
+    status: state ? state.status : '',
     config,
   };
   return state;

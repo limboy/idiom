@@ -2,24 +2,11 @@ import { AppProvider, useAppContext } from './useAppContext';
 import { nextHourTs } from '../utils/date';
 import { render } from '@testing-library/react';
 import { useEffect, useRef } from 'react';
-
-const storeService = () => {
-  let _store = {};
-  return {
-    getItem: (key) => _store[key] || null,
-    setItem: (key, value) => (_store[key] = JSON.stringify(value)),
-  };
-};
-
-const appProviderConfig = {
-  maxAttempts: 5,
-  startTs: null,
-  resetTs: nextHourTs(),
-  answer: {
-    en: ['bu', 'li', 'bu', 'qi'],
-    cn: ['不', '离', '不', '弃'],
-  },
-};
+import {
+  storeServiceWithNoHistory,
+  storeServiceWithSomeHistory,
+  appProviderConfig,
+} from '../data/test';
 
 test('config should match', () => {
   let Component = (props) => {
@@ -29,7 +16,10 @@ test('config should match', () => {
   };
 
   render(
-    <AppProvider config={appProviderConfig} storeService={storeService()}>
+    <AppProvider
+      config={appProviderConfig}
+      storeService={storeServiceWithNoHistory()}
+    >
       <Component callback={callback} />
     </AppProvider>
   );
@@ -74,7 +64,10 @@ test('add letter', (done) => {
   };
 
   render(
-    <AppProvider config={appProviderConfig} storeService={storeService()}>
+    <AppProvider
+      config={appProviderConfig}
+      storeService={storeServiceWithNoHistory()}
+    >
       <TriggerComponent />
       <ReceiveComponent
         callback1={callback1}
@@ -168,7 +161,10 @@ test('delete letter', (done) => {
   }
 
   render(
-    <AppProvider config={appProviderConfig} storeService={storeService()}>
+    <AppProvider
+      config={appProviderConfig}
+      storeService={storeServiceWithNoHistory()}
+    >
       <TriggerComponent />
       <ReceiveComponent
         callback1={callback1}
@@ -210,7 +206,10 @@ test('enter key pressed without enough letters', (done) => {
   }
 
   render(
-    <AppProvider config={appProviderConfig} storeService={storeService()}>
+    <AppProvider
+      config={appProviderConfig}
+      storeService={storeServiceWithNoHistory()}
+    >
       <TriggerComponent />
       <ReceiveComponent callback={callback} />
     </AppProvider>
@@ -253,7 +252,10 @@ test('enter key pressed with check result', (done) => {
   }
 
   render(
-    <AppProvider config={appProviderConfig} storeService={storeService()}>
+    <AppProvider
+      config={appProviderConfig}
+      storeService={storeServiceWithNoHistory()}
+    >
       <TriggerComponent />
       <ReceiveComponent callback={callback} />
     </AppProvider>
@@ -320,7 +322,10 @@ test('check win', (done) => {
   }
 
   render(
-    <AppProvider config={appProviderConfig} storeService={storeService()}>
+    <AppProvider
+      config={appProviderConfig}
+      storeService={storeServiceWithNoHistory()}
+    >
       <TriggerComponent />
       <ReceiveComponent callback={callback} />
     </AppProvider>
@@ -393,7 +398,10 @@ test('check fail', (done) => {
   }
 
   render(
-    <AppProvider config={appProviderConfig} storeService={storeService()}>
+    <AppProvider
+      config={appProviderConfig}
+      storeService={storeServiceWithNoHistory()}
+    >
       <TriggerComponent />
       <ReceiveComponent callback={callback} />
     </AppProvider>
@@ -401,25 +409,8 @@ test('check fail', (done) => {
 });
 
 test('init with local state', (done) => {
-  let state = {
-    attempts: {
-      history: [
-        {
-          guess: ['BU', 'QU', 'BU', 'LA'],
-          checkResult: ['22', '10', '22', '10'],
-        },
-      ],
-      current: ['ZI', 'L_', '__', '__'],
-    },
-    status: '',
-  };
-
-  function createStore() {
-    let store = storeService();
-    store.setItem('state', JSON.stringify(state));
-    return store;
-  }
-
+  let storeService = storeServiceWithSomeHistory();
+  let state = JSON.parse(storeService.getItem('state'));
   let Component = (props) => {
     let { attempts, status } = useAppContext();
     let callback = props.callback;
@@ -433,13 +424,13 @@ test('init with local state', (done) => {
   };
 
   function callback(attempts, status) {
-    expect(attempts.history).toEqual(state.history);
-    expect(attempts.current).toEqual(state.current);
+    expect(attempts.history).toEqual(state.attempts.history);
+    expect(attempts.current).toEqual(state.attempts.current);
     expect(status).toEqual(state.status);
   }
 
   render(
-    <AppProvider config={appProviderConfig} storeService={createStore()}>
+    <AppProvider config={appProviderConfig} storeService={storeService}>
       <Component callback={callback} />
     </AppProvider>
   );
