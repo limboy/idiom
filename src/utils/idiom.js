@@ -3,7 +3,7 @@ import { allIdioms } from '../data/idioms';
 function Idiom() {
   this.idiomBySeed = (seed) => {
     let idiomIndex = seed % allIdioms.length;
-    return allIdioms[idiomIndex];
+    return { cn: allIdioms[idiomIndex][0], en: allIdioms[idiomIndex][1] };
   };
 }
 

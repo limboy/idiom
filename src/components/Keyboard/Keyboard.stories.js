@@ -14,7 +14,7 @@ export default {
 const Template = ({ ...args }) => {
   return (
     <AppProvider config={appProviderConfig} storeService={args.storeService}>
-      <Keyboard onKeyPress={(letter) => console.log(letter)} />
+      <Keyboard />
     </AppProvider>
   );
 };

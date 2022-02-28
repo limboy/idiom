@@ -410,7 +410,7 @@ test('check fail', (done) => {
 
 test('init with local state', (done) => {
   let storeService = storeServiceWithSomeHistory();
-  let state = JSON.parse(storeService.getItem('state'));
+  let state = JSON.parse(storeService.getItem('pyccy-state'));
   let Component = (props) => {
     let { attempts, status } = useAppContext();
     let callback = props.callback;

@@ -23,7 +23,7 @@ export default function Board(props) {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col gap-2 md:gap-4">
+    <div className="w-full max-w-2xl mx-auto flex flex-col gap-2 md:gap-4 py-12">
       {idioms.map((idiom, i) => {
         return (
           <Idiom

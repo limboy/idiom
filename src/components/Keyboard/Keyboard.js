@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { useAppContext } from '../../hooks/useAppContext';
 
 function Button(props) {
+  const { pressLetter } = useAppContext();
   let flexBasis = '100%';
   let letterValue = props.letter;
   if (props.letter === 'Enter' || props.letter === '⌫') {
@@ -13,7 +14,7 @@ function Button(props) {
 
   function onSelectLetter(event) {
     let letter = event.target.dataset.value;
-    props.onKeyPress(letter);
+    pressLetter(letter);
   }
 
   let textColor = props.checkResult ? 'text-gray-100' : 'text-gray-800';
@@ -25,7 +26,7 @@ function Button(props) {
 
   return (
     <button
-      className={`w-full h-full ${bgColor} ${textColor}  text-base font-bold py-2 md:py-4`}
+      className={`w-full h-full ${bgColor} ${textColor}  text-base font-bold py-2 md:py-4 active:bg-gray-700 active:text-gray-100`}
       style={{ flexBasis }}
       data-value={letterValue}
       onClick={onSelectLetter}
@@ -53,13 +54,31 @@ function parseHistory(history) {
   return result;
 }
 
+let row1Keys = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
+let row2Keys = ['', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ''];
+let row3Keys = ['Enter', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'];
+
 export default function Keyboard(props) {
-  let { attempts } = useAppContext();
-  let row1Keys = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
-  let row2Keys = ['', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ''];
-  let row3Keys = ['Enter', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'];
+  let { attempts, pressLetter } = useAppContext();
 
   let parseResult = parseHistory(attempts.history);
+
+  useEffect(() => {
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        const keyName = event.key.toUpperCase();
+        if ([row1Keys, row2Keys, row3Keys].flat().indexOf(keyName) !== -1) {
+          pressLetter(keyName);
+        } else if (keyName === 'BACKSPACE') {
+          pressLetter('Backspace');
+        } else if (keyName === 'ENTER') {
+          pressLetter('Enter');
+        }
+      },
+      false
+    );
+  }, [pressLetter]);
 
   return (
     <div className="flex flex-col gap-2 items-center">
@@ -87,7 +106,3 @@ export default function Keyboard(props) {
     </div>
   );
 }
-
-Keyboard.propTypes = {
-  onKeyPress: PropTypes.func,
-};

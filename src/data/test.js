@@ -33,6 +33,6 @@ export const storeServiceWithSomeHistory = () => {
   };
 
   let store = storeServiceWithNoHistory();
-  store.setItem('state', state);
+  store.setItem('pyccy-state', state);
   return store;
 };

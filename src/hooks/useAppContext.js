@@ -4,7 +4,7 @@ import update from 'immutability-helper';
 export const AppContext = React.createContext();
 
 function initState(storeService, config) {
-  let state = JSON.parse(storeService.getItem('state'));
+  let state = JSON.parse(storeService.getItem('pyccy-state'));
   let attempts = {
     history: state ? state.attempts.history : [],
     current: state

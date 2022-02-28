@@ -4,9 +4,11 @@ import { currentHourTs, nextHourTs } from './utils/date';
 import idiom from './utils/idiom';
 import Nav from './components/Nav';
 import Inner from './components/Inner';
+import Board from './components/Board';
+import Keyboard from './components/Keyboard';
 
 const config = () => {
-  let localState = JSON.parse(localStorage.getItem('state'));
+  let localState = JSON.parse(localStorage.getItem('pyccy-state'));
   return {
     startTs: localState ? localState.startTs : null,
     resetTs: nextHourTs(),
@@ -19,7 +21,11 @@ function App() {
   return (
     <AppProvider config={config()} storeService={localStorage}>
       <Inner>
-        <Nav></Nav>
+        <div className="flex flex-col justify-between h-full pb-3">
+          <Nav />
+          <Board />
+          <Keyboard />
+        </div>
       </Inner>
     </AppProvider>
   );
