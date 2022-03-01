@@ -9,10 +9,16 @@ import Keyboard from './components/Keyboard';
 
 const config = () => {
   let localState = JSON.parse(localStorage.getItem('pyccy-state'));
+  let currentHour = currentHourTs();
+
+  if (localState && currentHour > localState.startTs) {
+    localState.removeItem('pyccy-state');
+  }
+
   return {
-    startTs: localState ? localState.startTs : null,
+    startTs: currentHour,
     resetTs: nextHourTs(),
-    answer: idiom.idiomBySeed(currentHourTs()),
+    answer: idiom.idiomBySeed(currentHour),
     maxAttempts: 6,
   };
 };

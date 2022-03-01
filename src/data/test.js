@@ -15,6 +15,7 @@ export const storeServiceWithNoHistory = () => {
   return {
     getItem: (key) => _store[key] || null,
     setItem: (key, value) => (_store[key] = value),
+    removeItem: (key) => delete _store[key],
   };
 };
 
