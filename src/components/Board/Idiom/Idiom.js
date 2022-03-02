@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import toast from 'react-hot-toast';
 import { useAppContext } from '../../../hooks/useAppContext';
 
 const Letter = (props) => {
@@ -33,6 +34,14 @@ export default function Idiom(props) {
   const column2Width = lettersLengthes[1] / lettersLength;
   const column3Width = lettersLengthes[2] / lettersLength;
   const column4Width = lettersLengthes[3] / lettersLength;
+
+  if (attempts.current.checkResult.length > 0) {
+    // prevent duplicate toast
+    toast.error('这不是正确的拼音组合哦', {
+      id: attempts.current.checkResult.join(','),
+    });
+  }
+
   return (
     <div
       className={`w-full max-w-2xl grid  gap-2 md:gap-4`}

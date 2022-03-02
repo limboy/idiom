@@ -7,6 +7,7 @@ import Inner from './components/Inner';
 import Board from './components/Board';
 import Keyboard from './components/Keyboard';
 import Result from './components/Result';
+import { Toaster } from 'react-hot-toast';
 
 const config = () => {
   let localState = JSON.parse(localStorage.getItem('pyccy-state'));
@@ -35,6 +36,7 @@ function App() {
           <Result />
         </div>
       </Inner>
+      <Toaster />
     </AppProvider>
   );
 }
