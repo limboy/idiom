@@ -1,20 +1,22 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
+import combinations from '../data/combinations';
 
 export const AppContext = React.createContext();
 
 function initState(storeService, config) {
   let state = JSON.parse(storeService.getItem('pyccy-state'));
+  let placeholder = config.answer.en.map((letter) =>
+    Array(letter.length)
+      .fill(null)
+      .map((_) => '_')
+      .join('')
+  );
   let attempts = {
     history: state ? state.attempts.history : [],
     current: state
       ? state.attempts.current
-      : config.answer.en.map((letter) =>
-          Array(letter.length)
-            .fill(null)
-            .map((_) => '_')
-            .join('')
-        ),
+      : { guess: placeholder, checkResult: [] },
   };
   state = {
     attempts,
@@ -72,11 +74,19 @@ function checkAttempt(attempt, answer) {
 }
 
 function handleDeleteLetter(state) {
-  let current = state.attempts.current;
+  let current = state.attempts.current.guess;
 
   // nothing to delete
   if (current.every((letters) => letters.indexOf('_') === 0)) {
     return state;
+  }
+
+  let newState = Object.assign({}, state);
+
+  if (state.attempts.current.checkResult.length > 0) {
+    newState = update(newState, {
+      attempts: { current: { checkResult: { $set: [] } } },
+    });
   }
 
   let currentCopy = current.slice().map((letters) => letters.split(''));
@@ -95,16 +105,36 @@ function handleDeleteLetter(state) {
   }
   currentCopy = currentCopy.map((letters) => letters.join(''));
 
-  return update(state, { attempts: { current: { $set: currentCopy } } });
+  return update(newState, {
+    attempts: { current: { guess: { $set: currentCopy } } },
+  });
+}
+
+function checkCombinations(guess) {
+  let invalidIndexes = [];
+  guess.forEach((letters, i) => {
+    if (combinations.indexOf(letters.toLowerCase()) === -1) {
+      invalidIndexes.push(i);
+    }
+  });
+  return invalidIndexes;
 }
 
 function handleEnter(state) {
-  let current = state.attempts.current;
+  let current = state.attempts.current.guess;
   let newState = Object.assign({}, state);
 
   // not full
   if (current.some((letters) => letters.indexOf('_') >= 0)) {
     return state;
+  }
+
+  let combinationCheckResult = checkCombinations(current);
+  if (combinationCheckResult.length > 0) {
+    newState = update(state, {
+      attempts: { current: { checkResult: { $set: combinationCheckResult } } },
+    });
+    return newState;
   }
 
   let checkResult = checkAttempt(current, state.config.answer.en);
@@ -117,9 +147,12 @@ function handleEnter(state) {
   newState = update(newState, {
     attempts: {
       current: {
-        $set: current.map((letters) =>
-          Array(letters.length).fill('_').join('')
-        ),
+        $set: {
+          guess: current.map((letters) =>
+            Array(letters.length).fill('_').join('')
+          ),
+          checkResult: [],
+        },
       },
     },
   });
@@ -138,7 +171,7 @@ function handleEnter(state) {
 }
 
 function handleLetter(state, letter) {
-  let currentCopy = [...state.attempts.current];
+  let currentCopy = [...state.attempts.current.guess];
 
   // all filled
   if (
@@ -160,7 +193,9 @@ function handleLetter(state, letter) {
     }
   }
 
-  return update(state, { attempts: { current: { $set: currentCopy } } });
+  return update(state, {
+    attempts: { current: { guess: { $set: currentCopy } } },
+  });
 }
 
 function reducer(state, action) {

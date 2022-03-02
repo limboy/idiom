@@ -1,5 +1,4 @@
 import { AppProvider, useAppContext } from './useAppContext';
-import { nextHourTs } from '../utils/date';
 import { render } from '@testing-library/react';
 import { useEffect, useRef } from 'react';
 import {
@@ -79,23 +78,23 @@ test('add letter', (done) => {
   );
 
   function callback1(attempts) {
-    expect(attempts.current[0].charAt(0)).toBe('A');
+    expect(attempts.current.guess[0].charAt(0)).toBe('A');
   }
 
   function callback2(attempts) {
-    expect(attempts.current[0]).toBe('AB');
+    expect(attempts.current.guess[0]).toBe('AB');
   }
 
   function callback3(attempts) {
-    expect(attempts.current[0]).toBe('AB');
-    expect(attempts.current[1].charAt(0)).toBe('C');
+    expect(attempts.current.guess[0]).toBe('AB');
+    expect(attempts.current.guess[1].charAt(0)).toBe('C');
   }
 
   function callback4(attempts) {
-    expect(attempts.current[0]).toBe('AB');
-    expect(attempts.current[1]).toBe('CD');
-    expect(attempts.current[2]).toBe('EF');
-    expect(attempts.current[3]).toBe('GH');
+    expect(attempts.current.guess[0]).toBe('AB');
+    expect(attempts.current.guess[1]).toBe('CD');
+    expect(attempts.current.guess[2]).toBe('EF');
+    expect(attempts.current.guess[3]).toBe('GH');
   }
 });
 
@@ -141,23 +140,23 @@ test('delete letter', (done) => {
   };
 
   function callback1(attempts) {
-    expect(attempts.current[3].charAt(1)).toBe('_');
+    expect(attempts.current.guess[3].charAt(1)).toBe('_');
   }
 
   function callback2(attempts) {
-    expect(attempts.current[3]).toBe('__');
+    expect(attempts.current.guess[3]).toBe('__');
   }
 
   function callback3(attempts) {
-    expect(attempts.current[3]).toBe('__');
-    expect(attempts.current[2].charAt(1)).toBe('_');
+    expect(attempts.current.guess[3]).toBe('__');
+    expect(attempts.current.guess[2].charAt(1)).toBe('_');
   }
 
   function callback4(attempts) {
-    expect(attempts.current[0]).toBe('__');
-    expect(attempts.current[1]).toBe('__');
-    expect(attempts.current[2]).toBe('__');
-    expect(attempts.current[3]).toBe('__');
+    expect(attempts.current.guess[0]).toBe('__');
+    expect(attempts.current.guess[1]).toBe('__');
+    expect(attempts.current.guess[2]).toBe('__');
+    expect(attempts.current.guess[3]).toBe('__');
   }
 
   render(

@@ -28,7 +28,7 @@ export const storeServiceWithSomeHistory = () => {
           checkResult: ['22', '10', '22', '10'],
         },
       ],
-      current: ['ZI', 'L_', '__', '__'],
+      current: { guess: ['ZI', 'L_', '__', '__'], checkResult: [] },
     },
     status: '',
   };
@@ -51,7 +51,7 @@ export const storeServiceWithFinishWinStatus = () => {
           checkResult: ['22', '22', '22', '22'],
         },
       ],
-      current: ['__', '__', '__', '__'],
+      current: { guess: ['__', '__', '__', '__'], checkResult: [] },
     },
     status: 'WIN',
   };
@@ -86,7 +86,7 @@ export const storeServiceWithFinishFailStatus = () => {
           checkResult: ['22', '10', '22', '10'],
         },
       ],
-      current: ['__', '__', '__', '__'],
+      current: { guess: ['__', '__', '__', '__'], checkResult: [] },
     },
     status: 'FAIL',
   };

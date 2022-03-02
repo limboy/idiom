@@ -12,10 +12,10 @@ export default function Board(props) {
         checkResult: attempt.checkResult,
       });
     } else if (i === attempts.history.length) {
-      idioms.push({ letters: attempts.current });
+      idioms.push({ letters: attempts.current.guess });
     } else {
       idioms.push({
-        letters: attempts.current.map((letters) =>
+        letters: attempts.current.guess.map((letters) =>
           Array(letters.length).fill('_').join('')
         ),
       });
