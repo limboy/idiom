@@ -162,14 +162,20 @@ function NextRound(props) {
 
 export default function Result(props) {
   let { status } = useAppContext();
-  if (!status) {
-    return <></>;
-  }
+  let [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (status) {
+      setTimeout(() => {
+        setIsOpen(true);
+      }, 800);
+    }
+  }, [status, isOpen]);
 
   let title = status === 'WIN' ? '🥳' : '😭';
 
   return (
-    <Modal title={title}>
+    <Modal title={title} isOpen={isOpen}>
       <Answer />
       <Attempts />
       {status === 'WIN' && <Share />}

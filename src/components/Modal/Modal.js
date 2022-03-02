@@ -3,7 +3,7 @@ import { useState } from 'react';
 export default function Modal(props) {
   let [isCloseModal, closeModal] = useState(false);
 
-  if (isCloseModal) {
+  if (isCloseModal || !props.isOpen) {
     return <></>;
   }
 

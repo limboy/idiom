@@ -4,10 +4,12 @@ import { useAppContext } from '../../../hooks/useAppContext';
 
 const Letter = (props) => {
   let bgColors = ['bg-gray-500', 'bg-yellow-600', 'bg-green-600'];
-  let bgColor =
-    props.checkResult !== null ? bgColors[props.checkResult] : 'bg-gray-200';
-  let textColor =
-    props.checkResult !== null ? 'text-gray-100' : 'text-gray-500';
+  let bgColor = Number.isInteger(props.checkResult)
+    ? bgColors[props.checkResult]
+    : 'bg-gray-200';
+  let textColor = Number.isInteger(props.checkResult)
+    ? 'text-gray-100'
+    : 'text-gray-500';
   let visibility = props.letter === '_' ? 'invisible' : 'visible';
   return (
     <div
@@ -50,7 +52,10 @@ export default function Idiom(props) {
       }}
     >
       {props.letters.map((letters, i) => {
-        let isValid = guessValidCheckResult.indexOf(i) === -1;
+        let isValid = true;
+        if (props.nthAttempt === attempts.history.length + 1) {
+          isValid = guessValidCheckResult.indexOf(i) === -1;
+        }
         return (
           <div
             key={i}

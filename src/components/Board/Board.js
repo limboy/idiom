@@ -28,6 +28,7 @@ export default function Board(props) {
         return (
           <Idiom
             key={i}
+            nthAttempt={i + 1}
             letters={idiom.letters}
             checkResult={idiom.checkResult}
           />
