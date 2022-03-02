@@ -6,6 +6,7 @@ import Nav from './components/Nav';
 import Inner from './components/Inner';
 import Board from './components/Board';
 import Keyboard from './components/Keyboard';
+import Result from './components/Result';
 
 const config = () => {
   let localState = JSON.parse(localStorage.getItem('pyccy-state'));
@@ -31,6 +32,7 @@ function App() {
           <Nav />
           <Board />
           <Keyboard />
+          <Result />
         </div>
       </Inner>
     </AppProvider>

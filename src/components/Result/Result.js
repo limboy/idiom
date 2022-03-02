@@ -106,7 +106,7 @@ function Share(props) {
   if (!hasCopied) {
     return (
       <button
-        className="px-6 py-2 rounded bg-gray-200 font-medium my-4 active:bg-gray-700 active:text-gray-100"
+        className="px-6 py-2 rounded bg-gray-200 font-medium mt-6 active:bg-gray-700 active:text-gray-100"
         onClick={shareResult}
       >
         分享成绩
@@ -145,7 +145,7 @@ function NextRound(props) {
   }, [config]);
 
   return (
-    <div className="py-4 flex flex-col items-center justify-center">
+    <div className="pt-6 pb-2 flex flex-col items-center justify-center">
       <div className="pb-2 text-sm">下一个成语</div>
       <div
         className="text-4xl"
@@ -164,7 +164,7 @@ export default function Result(props) {
   let { status } = useAppContext();
   let [isCloseModal, closeModal] = useState(false);
   if (!status || isCloseModal) {
-    return <div></div>;
+    return <></>;
   }
 
   let title = status === 'WIN' ? '🥳' : '😭';
@@ -172,7 +172,7 @@ export default function Result(props) {
   return (
     <div className="flex absolute w-full h-full top-0 left-0 justify-center items-center z-10 bg-white/50">
       <div
-        className="w-11/12 max-w-2xl relative max-h-[90%] border border-solid border-gray-100 overflow-y-scroll rounded-lg p-4 flex flex-col items-center"
+        className="bg-white w-11/12 max-w-2xl relative max-h-[90%] border border-solid border-gray-100 overflow-y-scroll rounded-lg p-4 flex flex-col items-center"
         style={{ boxShadow: '0 4px 23px 0 rgb(0 0 0 / 20%)' }}
       >
         <div className="w-full border-b border-solid border-gray-300 text-3xl text-center pb-3 flex flex-row justify-between items-center">
@@ -189,7 +189,7 @@ export default function Result(props) {
         </div>
         <Answer />
         <Attempts />
-        <Share />
+        {status === 'WIN' && <Share />}
         <NextRound />
       </div>
     </div>
