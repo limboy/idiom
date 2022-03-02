@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { XIcon } from '@heroicons/react/outline';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppContext } from '../../hooks/useAppContext';
 
 function Answer(props) {
@@ -122,7 +123,7 @@ function Share(props) {
 
 function NextRound(props) {
   let { config } = useAppContext();
-  let [nextRoundText, setNextRoundText] = useState('__:__');
+  let [nextRoundText, setNextRoundText] = useState('_');
   useEffect(() => {
     let interval = setInterval(() => {
       let currentDate = new Date();
@@ -144,12 +145,13 @@ function NextRound(props) {
   }, [config]);
 
   return (
-    <div className="py-6 flex flex-col items-center justify-center">
-      <div className="pb-2">下一个成语</div>
+    <div className="py-4 flex flex-col items-center justify-center">
+      <div className="pb-2 text-sm">下一个成语</div>
       <div
         className="text-4xl"
         style={{
           fontFamily: '"Clear Sans", "Helvetica Neue", Arial, sans-serif',
+          visibility: nextRoundText === '_' ? 'hidden' : 'visible',
         }}
       >
         {nextRoundText}
@@ -160,7 +162,8 @@ function NextRound(props) {
 
 export default function Result(props) {
   let { status } = useAppContext();
-  if (!status) {
+  let [isCloseModal, closeModal] = useState(false);
+  if (!status || isCloseModal) {
     return <div></div>;
   }
 
@@ -172,8 +175,17 @@ export default function Result(props) {
         className="w-11/12 max-w-2xl relative max-h-[90%] border border-solid border-gray-100 overflow-y-scroll rounded-lg p-4 flex flex-col items-center"
         style={{ boxShadow: '0 4px 23px 0 rgb(0 0 0 / 20%)' }}
       >
-        <div className="w-full border-b border-solid border-gray-300 text-3xl text-center pb-3">
-          {title}
+        <div className="w-full border-b border-solid border-gray-300 text-3xl text-center pb-3 flex flex-row justify-between items-center">
+          <div></div>
+          <div>{title}</div>
+          <div>
+            <XIcon
+              className="h-5 w-5 text-gray-600 cursor-pointer"
+              onClick={() => {
+                closeModal(true);
+              }}
+            ></XIcon>
+          </div>
         </div>
         <Answer />
         <Attempts />
