@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useAppContext } from '../../../hooks/useAppContext';
 
 const Letter = (props) => {
   let bgColors = ['bg-gray-500', 'bg-yellow-600', 'bg-green-600'];
@@ -9,9 +10,11 @@ const Letter = (props) => {
   let visibility = props.letter === '_' ? 'invisible' : 'visible';
   return (
     <div
-      className={`${bgColor} ${textColor} w-full h-full text-center align-middle text-2xl md:text-4xl md:py-2`}
+      className={`transition-all ${bgColor} ${
+        props.isValid ? textColor : 'text-red-600'
+      } w-full h-full text-center align-middle text-2xl md:text-4xl md:py-2`}
     >
-      <span className={`${visibility}`}>{props.letter.toUpperCase()}</span>
+      <span className={`${visibility} `}>{props.letter.toUpperCase()}</span>
     </div>
   );
 };
@@ -22,6 +25,8 @@ Letter.propTypes = {
 };
 
 export default function Idiom(props) {
+  let { attempts } = useAppContext();
+  let guessValidCheckResult = attempts.current.checkResult;
   let lettersLengthes = props.letters.map((item) => item.length);
   let lettersLength = lettersLengthes.reduce((p, c) => p + c, 0);
   const column1Width = lettersLengthes[0] / lettersLength;
@@ -36,6 +41,7 @@ export default function Idiom(props) {
       }}
     >
       {props.letters.map((letters, i) => {
+        let isValid = guessValidCheckResult.indexOf(i) === -1;
         return (
           <div
             key={i}
@@ -52,6 +58,7 @@ export default function Idiom(props) {
               }
               return (
                 <Letter
+                  isValid={isValid}
                   key={`${i}-${j}`}
                   checkResult={checkResult}
                   letter={letter}
