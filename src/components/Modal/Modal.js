@@ -38,6 +38,9 @@ export default function Modal(props) {
           transitionDuration: '0.3s',
           marginBottom: isOpen ? '0px' : '-50px',
         }}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         <div className="w-full border-b border-solid border-gray-300 text-2xl text-center pb-3 flex flex-row justify-between items-center">
           <div></div>
