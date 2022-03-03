@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
-import combinations from '../data/combinations';
+import combinations from '../data/combinations.json';
 import { currentHourTs, nextHourTs } from '../utils/date';
 
 export const AppContext = React.createContext();
