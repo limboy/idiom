@@ -5,7 +5,7 @@ import Modal from '../Modal';
 function Answer(props) {
   let { config } = useAppContext();
   return (
-    <div className="flex flex-row justify-center gap-4 py-6">
+    <div className="flex flex-row justify-center gap-4 pt-6 pb-4">
       {config.answer.cn.map((character, i) => {
         return (
           <div
@@ -16,11 +16,20 @@ function Answer(props) {
               {character}
             </div>
             <div className="px-2 py-1 text-base text-center">
-              {config.answer.en[i]}
+              {config.answer.pinyin[i]}
             </div>
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function Explanation(props) {
+  let { config } = useAppContext();
+  return (
+    <div className="text-gray-500 pb-3 text-center">
+      {config.answer.explanation}
     </div>
   );
 }
@@ -177,6 +186,7 @@ export default function Result(props) {
   return (
     <Modal title={title} isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <Answer />
+      <Explanation />
       <Attempts />
       {status === 'WIN' && <Share />}
       <NextRound />
