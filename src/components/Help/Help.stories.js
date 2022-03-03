@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Help from '.';
 
 export default {
@@ -6,8 +7,9 @@ export default {
 };
 
 const Template = ({ ...args }) => {
-  return <Help {...args} />;
+  let [isOpen, setIsOpen] = useState(true);
+  return <Help {...args} isOpen={isOpen} onClose={() => setIsOpen(false)} />;
 };
 
 export const Default = Template.bind({});
-Default.args = { isOpen: true };
+Default.args = {};

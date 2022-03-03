@@ -170,7 +170,7 @@ export default function Result(props) {
         setIsOpen(true);
       }, 800);
     }
-  }, [status, isOpen]);
+  }, [status]);
 
   let title = status === 'WIN' ? '🥳' : '😭';
 

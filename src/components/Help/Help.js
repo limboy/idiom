@@ -51,7 +51,7 @@ export default function Help(props) {
         })}
       </div>
 
-      <div className="flex flex-col items-center justify-center pt-3 pb-4">
+      <div className="flex flex-col items-center justify-center pt-3 pb-4 text-center">
         <p className="font-medium">超过数量的字母会被标记为灰色。</p>
         <p className="text-gray-500">
           如答案中只有一个 N，但猜测过程中输入了两个 N，则第二个会被标记为灰色。
@@ -60,6 +60,16 @@ export default function Help(props) {
 
       <div className="w-[250px] py-3 mb-1 text-center bg-gray-200 text-gray-600 rounded-md">
         每小时会有一个新成语哦
+      </div>
+
+      <div className="py-4 text-gray-500 text-center">
+        <p className="">
+          created by:{' '}
+          <a className="underline" href="https://limboy.me">
+            limboy
+          </a>{' '}
+        </p>
+        <p>feedback to: limboy.me@gmail.com</p>
       </div>
     </Modal>
   );
