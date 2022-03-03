@@ -4,9 +4,10 @@ import Idiom from './Idiom';
 import { useState } from 'react';
 import Modal from '../Modal';
 
-function generateTipContent(attempts, config) {
-  let result = [];
-  let tone = config.answer.tone;
+export default function Board(props) {
+  let { attempts, config } = useAppContext();
+  let [modalIsOpen, setModalIsOpen] = useState(false);
+  let idioms = [];
   const toneMap = {
     1: 'ˉ',
     2: 'ˊ',
@@ -14,20 +15,6 @@ function generateTipContent(attempts, config) {
     4: 'ˋ',
   };
 
-  if (attempts.history.length === 0) {
-    result.push('每完成一次猜测，会有一个声调提示哦');
-  } else {
-    for (let i = 0; i < Math.min(attempts.history.length, 4); i++) {
-      result.push(`第 ${i + 1} 个字是第 ${tone[i]} 声：${toneMap[tone[i]]}`);
-    }
-  }
-  return result;
-}
-
-export default function Board(props) {
-  let { attempts, config } = useAppContext();
-  let [modalIsOpen, setModalIsOpen] = useState(false);
-  let idioms = [];
   for (let i = 0; i < config.maxAttempts; i++) {
     if (i < attempts.history.length) {
       let attempt = attempts.history[i];
@@ -46,8 +33,6 @@ export default function Board(props) {
     }
   }
 
-  let tipContent = generateTipContent(attempts, config);
-
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col justify-between flex-1">
       <div className="w-full h-full min-h-[48px] flex items-center justify-center ">
@@ -64,10 +49,53 @@ export default function Board(props) {
             setModalIsOpen(false);
           }}
         >
-          <div className="flex flex-col pt-6 pb-3 gap-1">
-            {tipContent.map((item, i) => {
-              return <p key={i}>{item}</p>;
-            })}
+          <div className="flex flex-col pt-6 pb-3 gap-1 items-center">
+            <p>以下是该成语的声调</p>
+            <p>每完成一次猜测，会多一个声调提示哦</p>
+            <div className="flex flex-row gap-4 pt-4">
+              {Array(4)
+                .fill(null)
+                .map((_, i) => {
+                  let visibility =
+                    attempts.history.length > i ? 'visible' : 'hidden';
+                  return (
+                    <div
+                      key={i}
+                      className="relative border border-solid border-gray-700 w-[64px] h-[64px]"
+                      style={{
+                        fontFamily:
+                          '"Clear Sans", "Helvetica Neue", Arial, sans-serif"',
+                      }}
+                    >
+                      <div
+                        className=""
+                        style={{
+                          visibility,
+                          fontSize: '32px',
+                          position: 'absolute',
+                          left: '27px',
+                          top: '-2px',
+                        }}
+                      >
+                        {visibility === 'visible'
+                          ? toneMap[config.answer.tone[i]]
+                          : '_'}
+                      </div>
+                      <div
+                        className="text-4xl"
+                        style={{
+                          visibility,
+                          position: 'absolute',
+                          top: '18px',
+                          left: '22px',
+                        }}
+                      >
+                        {visibility === 'visible' ? config.answer.tone[i] : '_'}
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
           </div>
         </Modal>
       </div>
