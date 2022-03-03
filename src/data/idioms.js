@@ -3861,7 +3861,7 @@ export const allIdioms = [
   ],
   [
     ['重', '蹈', '覆', '辙'],
-    ['zhong', 'dao', 'fu', 'zhe'],
+    ['chong', 'dao', 'fu', 'zhe'],
   ],
   [
     ['无', '时', '无', '刻'],

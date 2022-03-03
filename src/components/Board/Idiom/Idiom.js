@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useAppContext } from '../../../hooks/useAppContext';
 
@@ -15,7 +16,7 @@ const Letter = (props) => {
     <div
       className={`transition-all ${bgColor} ${
         props.isValid ? textColor : 'text-red-600'
-      } w-full h-full text-center align-middle text-2xl md:text-4xl md:py-2`}
+      } w-full h-full text-center align-middle text-2xl md:text-4xl md:py-2 select-none`}
     >
       <span className={`${visibility} `}>{props.letter.toUpperCase()}</span>
     </div>
@@ -37,12 +38,14 @@ export default function Idiom(props) {
   const column3Width = lettersLengthes[2] / lettersLength;
   const column4Width = lettersLengthes[3] / lettersLength;
 
-  if (attempts.current.checkResult.length > 0) {
-    // prevent duplicate toast
-    toast.error('这不是正确的拼音组合哦', {
-      id: attempts.current.checkResult.join(','),
-    });
-  }
+  useEffect(() => {
+    if (attempts.current.checkResult.length > 0) {
+      // prevent duplicate toast
+      toast.error('这不是正确的拼音组合哦', {
+        id: attempts.current.checkResult.join(','),
+      });
+    }
+  }, [attempts]);
 
   return (
     <div

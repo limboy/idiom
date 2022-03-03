@@ -72,6 +72,9 @@ export default function Keyboard(props) {
   useEffect(() => {
     let listener = (event) => {
       const keyName = event.key.toUpperCase();
+      if (event.metaKey || event.altKey || event.ctrlKey) {
+        return;
+      }
       if ([row1Keys, row2Keys, row3Keys].flat().indexOf(keyName) !== -1) {
         checkAndPressLetter(keyName);
       } else if (keyName === 'BACKSPACE') {

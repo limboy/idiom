@@ -1,11 +1,19 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
 import combinations from '../data/combinations';
+import { currentHourTs, nextHourTs } from '../utils/date';
 
 export const AppContext = React.createContext();
 
 function initState(storeService, config) {
   let state = JSON.parse(storeService.getItem('pyccy-state'));
+  let currentHour = currentHourTs();
+
+  if (state && currentHour > state.startTs) {
+    storeService.removeItem('pyccy-state');
+    state = null;
+  }
+
   let placeholder = config.answer.en.map((letter) =>
     Array(letter.length)
       .fill(null)
@@ -22,6 +30,8 @@ function initState(storeService, config) {
     attempts,
     status: state ? state.status : '',
     config,
+    startTs: currentHour,
+    resetTs: nextHourTs(),
   };
   return state;
 }

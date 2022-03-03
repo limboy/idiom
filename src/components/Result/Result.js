@@ -122,18 +122,18 @@ function Share(props) {
 }
 
 function NextRound(props) {
-  let { config } = useAppContext();
+  let { resetTs } = useAppContext();
   let [nextRoundText, setNextRoundText] = useState('_');
   useEffect(() => {
     let interval = setInterval(() => {
       let currentDate = new Date();
       currentDate.setMilliseconds(0);
-      if (currentDate > config.resetTs) {
+      if (currentDate > resetTs) {
         setNextRoundText('Ready');
         clearInterval(interval);
       } else {
-        let minutes = Math.floor((config.resetTs - currentDate) / 60000);
-        let seconds = (config.resetTs - currentDate) / 1000 - minutes * 60;
+        let minutes = Math.floor((resetTs - currentDate) / 60000);
+        let seconds = (resetTs - currentDate) / 1000 - minutes * 60;
         setNextRoundText(
           `${('0' + minutes).slice(-2)}:${('0' + seconds).slice(-2)}`
         );
@@ -142,7 +142,7 @@ function NextRound(props) {
     return () => {
       clearInterval(interval);
     };
-  }, [config]);
+  }, [resetTs]);
 
   return (
     <div className="pt-6 pb-2 flex flex-col items-center justify-center">
@@ -175,7 +175,7 @@ export default function Result(props) {
   let title = status === 'WIN' ? '🥳' : '😭';
 
   return (
-    <Modal title={title} isOpen={isOpen}>
+    <Modal title={title} isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <Answer />
       <Attempts />
       {status === 'WIN' && <Share />}

@@ -1,12 +1,14 @@
-import { QuestionMarkCircleIcon } from '@heroicons/react/outline';
-import { InformationCircleIcon } from '@heroicons/react/outline';
+import { RiQuestionLine, RiInformationLine } from 'react-icons/ri';
 import PropTypes from 'prop-types';
 
 export default function Nav(props) {
   return (
     <div className="flex flex-row justify-between h-10 border-b border-gray-300 items-center py-6">
       <div>
-        <QuestionMarkCircleIcon className="h-6 w-6" />
+        <RiQuestionLine
+          className="h-6 w-6 cursor-pointer"
+          onClick={props.onHelpClick}
+        />
       </div>
 
       <div>
@@ -14,7 +16,7 @@ export default function Nav(props) {
       </div>
 
       <div>
-        <InformationCircleIcon className="h-6 w-6" />
+        <RiInformationLine className="h-6 w-6 cursor-pointer" />
       </div>
     </div>
   );
