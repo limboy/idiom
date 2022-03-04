@@ -20,7 +20,9 @@ const config = () => {
 };
 
 function App() {
-  let [isShowHelp, setShowHelp] = useState(false);
+  let [isShowHelp, setShowHelp] = useState(
+    !localStorage.getItem('pyccy-state')
+  );
   let [isShowStatistics, setShowStatistics] = useState(false);
   return (
     <AppProvider config={config()} storeService={localStorage}>
