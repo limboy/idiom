@@ -26,7 +26,7 @@ function Button(props) {
 
   return (
     <button
-      className={`w-full h-full ${bgColor} ${textColor}  text-base font-bold py-2 md:py-4 active:bg-gray-700 active:text-gray-100 rounded`}
+      className={`w-full h-full ${bgColor} ${textColor}  text-base font-bold py-2 md:py-4 active:bg-gray-700 active:text-gray-100 rounded focus:outline-none`}
       style={{ flexBasis }}
       data-value={letterValue}
       onClick={onSelectLetter}

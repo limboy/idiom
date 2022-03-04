@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAppContext } from '../../hooks/useAppContext';
+import copyToClipboard from '../../utils/clipboard';
 import Modal from '../Modal';
 
 function Answer(props) {
@@ -108,7 +109,7 @@ function Share(props) {
     });
 
     let textStr = text.join('\n');
-    navigator.clipboard.writeText(textStr);
+    copyToClipboard(textStr);
     setHasCopied(true);
   }, [attempts]);
 
@@ -123,7 +124,7 @@ function Share(props) {
     );
   } else {
     return (
-      <button disabled className="px-6 py-2 font-medium my-4 text-blue-600">
+      <button disabled className="px-6 py-2 mt-6 font-medium text-blue-600">
         成绩已复制到剪贴板了
       </button>
     );
