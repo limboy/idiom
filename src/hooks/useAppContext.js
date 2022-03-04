@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 import update from 'immutability-helper';
 import combinations from '../data/combinations.json';
 import { currentHourTs, nextHourTs } from '../utils/date';
 
 export const AppContext = React.createContext();
 
-function initState(storeService, config) {
+let storeService;
+
+function initState(config) {
   let state = JSON.parse(storeService.getItem('pyccy-state'));
   let currentHour = currentHourTs();
 
@@ -26,14 +28,13 @@ function initState(storeService, config) {
       ? state.attempts.current
       : { guess: placeholder, checkResult: [] },
   };
-  state = {
+  return {
     attempts,
     status: state ? state.status : '',
     config,
     startTs: currentHour,
     resetTs: nextHourTs(),
   };
-  return state;
 }
 
 function checkAttempt(attempt, answer) {
@@ -227,11 +228,9 @@ function reducer(state, action) {
 }
 
 export function AppProvider(props) {
-  let storeService = props.storeService;
-  let [state, dispatch] = useReducer(
-    reducer,
-    initState(storeService, props.config)
-  );
+  storeService = props.storeService;
+  let [state, dispatch] = useReducer(reducer, initState(props.config));
+  let statusRef = useRef(state.status);
 
   let pressLetter = useCallback(
     (letter) => {
@@ -243,11 +242,25 @@ export function AppProvider(props) {
   const value = {
     ...state,
     pressLetter,
+    storeService,
   };
 
   useEffect(() => {
     storeService.setItem('pyccy-state', JSON.stringify(state));
-  }, [state, storeService]);
+  }, [state]);
+
+  useEffect(() => {
+    // TODO add load from storeService to distingush
+    if (state.status && statusRef.current !== state.status) {
+      let statistics =
+        JSON.parse(storeService.getItem('pyccy-statistics')) || [];
+      statistics.push([
+        state.startTs,
+        state.status === 'FAIL' ? -1 : state.attempts.history.length,
+      ]);
+      storeService.setItem('pyccy-statistics', JSON.stringify(statistics));
+    }
+  }, [state]);
 
   return <AppContext.Provider value={value} {...props} />;
 }

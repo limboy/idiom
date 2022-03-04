@@ -1,11 +1,12 @@
-import { RiQuestionLine, RiInformationLine } from 'react-icons/ri';
+import { FiHelpCircle } from 'react-icons/fi';
+import { BsBarChartLine } from 'react-icons/bs';
 import PropTypes from 'prop-types';
 
 export default function Nav(props) {
   return (
     <div className="flex flex-row justify-between h-10 border-b border-gray-300 items-center py-6">
       <div>
-        <RiQuestionLine
+        <FiHelpCircle
           className="h-6 w-6 cursor-pointer"
           onClick={props.onHelpClick}
         />
@@ -16,7 +17,10 @@ export default function Nav(props) {
       </div>
 
       <div>
-        <RiInformationLine className="h-6 w-6 cursor-pointer" />
+        <BsBarChartLine
+          onClick={props.onStatisticsClick}
+          className="h-6 w-6 cursor-pointer"
+        />
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import Result from './components/Result';
 import { Toaster } from 'react-hot-toast';
 import Help from './components/Help';
 import { useState } from 'react';
+import Statistics from './components/Statistics';
 
 const config = () => {
   return {
@@ -20,18 +21,23 @@ const config = () => {
 
 function App() {
   let [isShowHelp, setShowHelp] = useState(false);
-  function onHelpClick() {
-    setShowHelp(true);
-  }
+  let [isShowStatistics, setShowStatistics] = useState(false);
   return (
     <AppProvider config={config()} storeService={localStorage}>
       <Inner>
         <div className="flex flex-col justify-between h-full pb-3">
-          <Nav onHelpClick={onHelpClick} />
+          <Nav
+            onHelpClick={() => setShowHelp(true)}
+            onStatisticsClick={() => setShowStatistics(true)}
+          />
           <Board />
           <Keyboard />
           <Result />
           <Help isOpen={isShowHelp} onClose={() => setShowHelp(false)} />
+          <Statistics
+            isOpen={isShowStatistics}
+            onClose={() => setShowStatistics(false)}
+          />
         </div>
       </Inner>
       <Toaster />
