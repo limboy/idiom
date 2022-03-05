@@ -42,10 +42,8 @@ export default function Modal(props) {
           e.stopPropagation();
         }}
       >
-        <div className="w-full border-b border-solid border-gray-300 text-2xl text-center pb-3 flex flex-row justify-between items-center">
-          <div></div>
-          <div>{props.title}</div>
-          <div>
+        <div className="w-full border-b border-solid border-gray-300 text-2xl text-center pb-3 relative">
+          <div className="absolute right-1 top-1">
             <XIcon
               className="h-5 w-5 text-gray-600 cursor-pointer"
               onClick={() => {
@@ -53,6 +51,7 @@ export default function Modal(props) {
               }}
             ></XIcon>
           </div>
+          <div>{props.title}</div>
         </div>
         {props.children}
       </div>
