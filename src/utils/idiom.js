@@ -1,8 +1,10 @@
+import seedrandom from 'seedrandom';
 import allIdioms from '../data/idioms-rich.json';
 
 function Idiom() {
   this.idiomBySeed = (seed) => {
-    let idiomIndex = seed % allIdioms.length;
+    let rnd = seedrandom(seed + '');
+    let idiomIndex = Math.floor(allIdioms.length * rnd());
     return {
       cn: allIdioms[idiomIndex][0],
       en: allIdioms[idiomIndex][1],
