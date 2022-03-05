@@ -6,9 +6,11 @@ export default function Modal(props) {
   useEffect(() => {
     if (isOpen) {
       containerRef.current.style.visibility = 'visible';
+      containerRef.current.style.display = 'flex';
     }
     let transitionEnd = () => {
       containerRef.current.style.visibility = isOpen ? 'visibile' : 'hidden';
+      containerRef.current.style.display = isOpen ? 'flex' : 'none';
     };
 
     let container = containerRef.current;
@@ -19,7 +21,7 @@ export default function Modal(props) {
   }, [isOpen]);
   return (
     <div
-      className="flex absolute w-full h-full top-0 left-0 justify-center items-center z-10 bg-white/50 invisible"
+      className="absolute w-full h-full top-0 left-0 justify-center items-center z-10 bg-white/50 invisible hidden"
       ref={containerRef}
       style={{
         transitionDuration: '0.3s',
