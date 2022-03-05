@@ -16,7 +16,11 @@ function Tone(props) {
       component = <BsSlash />;
       break;
     case 3:
-      component = <BsChevronDown />;
+      component = (
+        <div className="text-xl pt-[6px] pb-1">
+          <BsChevronDown />
+        </div>
+      );
       break;
     case 4:
       component = (
