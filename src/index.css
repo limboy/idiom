@@ -27,3 +27,43 @@ body {
   width: 100vw;
   height: 100%;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+}
