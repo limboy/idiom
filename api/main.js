@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-let data = {};
+let data = new Map();
 let tokenPool = new Set();
 let KEY_PREFIX = process.env.KEY_PREFIX;
 let TOKEN_ALGORITHM = process.env.TOKEN_ALGORITHM;
@@ -32,30 +32,12 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (!data[key]) {
-    data[key] = Array(7).fill(0);
-    // console.log('fetching key' + key);
-    // let result = await Promise.all(
-    //   Array(7)
-    //     .fill(null)
-    //     .map((_, i) => {
-    //       return fetch(
-    //         'https://api.countapi.xyz/get/pyccy/' + KEY_PREFIX + key + '-' + i
-    //       );
-    //     })
-    // );
-
-    // let attempts = [];
-    // for (let item of result) {
-    //   let attempt = await item.json();
-    //   let value = attempt.value || 0;
-    //   attempts.push(parseInt(value));
-    // }
-    // data[key] = attempts;
+  if (!data.has(key)) {
+    data.set(key, new Array(7).fill(0));
   }
 
-  if (Object.keys(data).length > 1000) {
-    data = {};
+  if (data.size > 1000) {
+    data = new Map();
   }
 
   switch (action) {
@@ -68,21 +50,15 @@ export default async function handler(req, res) {
       }
       // 0 means fail
       let attempts = parseInt(body.success) ? parseInt(body.attempts) : 0;
-      data[key][attempts] += 1;
-      // const url =
-      //   'https://api.countapi.xyz/hit/pyccy/' +
-      //   KEY_PREFIX +
-      //   key +
-      //   '-' +
-      //   attempts;
-
-      // await fetch(url);
+      let result = data.get(key);
+      result[attempts] += 1;
+      data.set(key, result.slice());
       res.statusCode = 200;
       res.send({ status: 200 });
       return;
     case 'fetch':
       res.statusCode = 200;
-      res.send({ status: 200, data: data[key] });
+      res.send({ status: 200, data: data.get(key) });
       return;
     default:
       console.log('should not go here');
