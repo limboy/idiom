@@ -53,7 +53,7 @@ export default async function handler(req, res) {
     data[key] = attempts;
   }
 
-  if (Object.keys(data).size > 1000) {
+  if (Object.keys(data).length > 1000) {
     data = {};
   }
 
