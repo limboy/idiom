@@ -11,6 +11,7 @@ import { Toaster } from 'react-hot-toast';
 import Help from './components/Help';
 import { useState } from 'react';
 import Statistics from './components/Statistics';
+import './utils/fingerprint';
 
 const config = () => {
   return {
