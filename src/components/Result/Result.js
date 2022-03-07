@@ -200,6 +200,7 @@ export default function Result(props) {
       {status === 'WIN' && <Share />}
       <NextRound />
 
+      {/*
       {result && result.data ? (
         <>
           <hr className="border-solide border-t border-gray-300 w-40 mt-3" />
@@ -208,6 +209,7 @@ export default function Result(props) {
       ) : (
         ''
       )}
+      */}
     </Modal>
   );
 }
