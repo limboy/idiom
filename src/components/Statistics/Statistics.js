@@ -1,14 +1,13 @@
 import { useAppContext } from '../../hooks/useAppContext';
-import Modal from '../Modal';
 
 function parseStatistics(statistics, maxAttempts) {
-  let playedCount = statistics.length;
-  let winCount = statistics.reduce((p, c) => p + (c[1] === -1 ? 0 : 1), 0);
-  let loseCount = statistics.reduce((p, c) => p + (c[1] === -1 ? 1 : 0), 0);
-  let winRate = ((winCount / (winCount + loseCount)) * 100).toFixed(2);
-  let totalGuessCount = statistics
-    .filter((item) => item[1] !== -1)
-    .reduce((p, c) => p + c[1], 0);
+  let playedCount = statistics.reduce((p, c) => p + c, 0);
+  let winCount = statistics.slice(1).reduce((p, c) => p + c, 0) || 0;
+  let winRate = playedCount ? ((winCount / playedCount) * 100).toFixed(2) : 0;
+  let totalGuessCount = 0;
+  statistics.slice(1).forEach((item, i) => {
+    totalGuessCount += item * (i + 1);
+  });
 
   let avgGuessCount =
     winCount > 0 ? (totalGuessCount / winCount).toFixed(2) : 0;
@@ -41,15 +40,7 @@ function Summary(props) {
 }
 
 function Distribution(props) {
-  let statistics = Array(props.maxAttempts).fill(0);
-  if (props.statistics) {
-    props.statistics
-      .filter((item) => item[1] !== -1)
-      .forEach((item) => {
-        let guessCount = item[1];
-        statistics[guessCount - 1] += 1;
-      });
-  }
+  let statistics = props.statistics.slice(1);
   let maxCount = Math.max(1, Math.max(...statistics));
   return (
     <div
@@ -79,8 +70,9 @@ function Distribution(props) {
 }
 
 export default function Statistics(props) {
-  let { storeService, config } = useAppContext();
-  let statistics = JSON.parse(storeService.getItem('pyccy-statistics'));
+  let { config } = useAppContext();
+  let statistics = props.statistics;
+
   let playedCount = 0;
   let winRate = 0;
   let avgGuessCount = 0;
@@ -90,14 +82,15 @@ export default function Statistics(props) {
       config.maxAttempts
     ));
   }
+
   return (
-    <Modal isOpen={props.isOpen} onClose={props.onClose} title="数据统计">
+    <>
       <Summary
         playedCount={playedCount}
         winRate={winRate}
         avgGuessCount={avgGuessCount}
       />
       <Distribution maxAttempts={config.maxAttempts} statistics={statistics} />
-    </Modal>
+    </>
   );
 }

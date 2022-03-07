@@ -250,7 +250,6 @@ export function AppProvider(props) {
   }, [state]);
 
   useEffect(() => {
-    // TODO add load from storeService to distingush
     if (state.status && statusRef.current !== state.status) {
       let statistics =
         JSON.parse(storeService.getItem('pyccy-statistics')) || [];
@@ -259,6 +258,23 @@ export function AppProvider(props) {
         state.status === 'FAIL' ? -1 : state.attempts.history.length,
       ]);
       storeService.setItem('pyccy-statistics', JSON.stringify(statistics));
+      fetch(
+        `/api/main?action=guess&key=${state.startTs}&token=${window.peaceAndLove}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            success: state.status === 'WIN' ? 1 : 0,
+            attempts: state.attempts.history.length,
+          }),
+        }
+      )
+        .then((resp) => resp.json())
+        .then((data) => {
+          console.log(data);
+        });
     }
   }, [state]);
 

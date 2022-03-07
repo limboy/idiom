@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAppContext } from '../../hooks/useAppContext';
 import copyToClipboard from '../../utils/clipboard';
 import Modal from '../Modal';
+import useSWR from 'swr';
+import Statistics from '../Statistics';
 
 function Answer(props) {
   let { config } = useAppContext();
@@ -55,8 +57,8 @@ function Attempts(props) {
                   {letters.split('').map((letter, k) => {
                     let bgColors = [
                       'bg-gray-500',
-                      'bg-yellow-500',
-                      'bg-green-500',
+                      'bg-yellow-600',
+                      'bg-green-600',
                     ];
                     let checkResult = parseInt(
                       attempt.checkResult[j].charAt(k)
@@ -171,6 +173,12 @@ function NextRound(props) {
 }
 
 export default function Result(props) {
+  const { startTs } = useAppContext();
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const { data: result } = useSWR(
+    '/api/main?action=fetch&key=' + startTs,
+    fetcher
+  );
   let { status } = useAppContext();
   let [isOpen, setIsOpen] = useState(false);
 
@@ -191,6 +199,15 @@ export default function Result(props) {
       <Attempts />
       {status === 'WIN' && <Share />}
       <NextRound />
+
+      {result && result.data ? (
+        <>
+          <hr className="border-solide border-t border-gray-300 w-40 mt-3" />
+          <Statistics statistics={result.data} />
+        </>
+      ) : (
+        ''
+      )}
     </Modal>
   );
 }

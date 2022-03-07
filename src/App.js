@@ -12,6 +12,7 @@ import Help from './components/Help';
 import { useState } from 'react';
 import Statistics from './components/Statistics';
 import './utils/fingerprint';
+import Modal from './components/Modal';
 
 const config = () => {
   return {
@@ -25,6 +26,23 @@ function App() {
     !localStorage.getItem('pyccy-state')
   );
   let [isShowStatistics, setShowStatistics] = useState(false);
+  let statistics = JSON.parse(localStorage.getItem('pyccy-statistics'));
+  if (statistics) {
+    let simplifiedStatistics = Array(config().maxAttempts + 1).fill(0);
+    statistics.forEach((item) => {
+      let guessCount = item[1];
+      // failed
+      if (guessCount === -1) {
+        simplifiedStatistics[0] += 1;
+      } else {
+        simplifiedStatistics[guessCount] += 1;
+      }
+    });
+    statistics = simplifiedStatistics;
+  } else {
+    statistics = Array(config().maxAttempts + 1).fill(0);
+  }
+
   return (
     <AppProvider config={config()} storeService={localStorage}>
       <Inner>
@@ -37,10 +55,13 @@ function App() {
           <Keyboard />
           <Result />
           <Help isOpen={isShowHelp} onClose={() => setShowHelp(false)} />
-          <Statistics
+          <Modal
             isOpen={isShowStatistics}
             onClose={() => setShowStatistics(false)}
-          />
+            title="数据统计"
+          >
+            <Statistics statistics={statistics} />
+          </Modal>
         </div>
       </Inner>
       <Toaster />
