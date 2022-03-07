@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAppContext } from '../../hooks/useAppContext';
 import copyToClipboard from '../../utils/clipboard';
 import Modal from '../Modal';
-import useSWR from 'swr';
 
 function Answer(props) {
   let { config } = useAppContext();
