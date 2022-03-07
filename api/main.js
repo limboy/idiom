@@ -33,6 +33,7 @@ export default async function handler(req, res) {
   }
 
   if (!data[key]) {
+    console.log('fetching key' + key);
     let result = await Promise.all(
       Array(7)
         .fill(null)
