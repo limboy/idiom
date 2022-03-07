@@ -40,6 +40,10 @@ export default async function handler(req, res) {
     data = new Map();
   }
 
+  console.log(
+    'DATA:' + [...data.keys()].map((key) => key + ':' + data.get(key))
+  );
+
   switch (action) {
     case 'guess':
       const body = req.body;
@@ -51,8 +55,10 @@ export default async function handler(req, res) {
       // 0 means fail
       let attempts = parseInt(body.success) ? parseInt(body.attempts) : 0;
       let result = data.get(key);
+      console.log('BEFORE SET:' + JSON.stringify(result));
       result[attempts] += 1;
       data.set(key, result.slice());
+      console.log('AFTER SET:' + JSON.stringify(data.get(key)));
       res.statusCode = 200;
       res.send({ status: 200 });
       return;
