@@ -33,31 +33,30 @@ export default async function handler(req, res) {
   }
 
   if (!data[key]) {
-    console.log('fetching key' + key);
-    let result = await Promise.all(
-      Array(7)
-        .fill(null)
-        .map((_, i) => {
-          return fetch(
-            'https://api.countapi.xyz/get/pyccy/' + KEY_PREFIX + key + '-' + i
-          );
-        })
-    );
+    data[key] = Array(7).fill(0);
+    // console.log('fetching key' + key);
+    // let result = await Promise.all(
+    //   Array(7)
+    //     .fill(null)
+    //     .map((_, i) => {
+    //       return fetch(
+    //         'https://api.countapi.xyz/get/pyccy/' + KEY_PREFIX + key + '-' + i
+    //       );
+    //     })
+    // );
 
-    let attempts = [];
-    for (let item of result) {
-      let attempt = await item.json();
-      let value = attempt.value || 0;
-      attempts.push(parseInt(value));
-    }
-    data[key] = attempts;
+    // let attempts = [];
+    // for (let item of result) {
+    //   let attempt = await item.json();
+    //   let value = attempt.value || 0;
+    //   attempts.push(parseInt(value));
+    // }
+    // data[key] = attempts;
   }
 
   if (Object.keys(data).length > 1000) {
     data = {};
   }
-
-  console.log(JSON.stringify(data));
 
   switch (action) {
     case 'guess':
@@ -70,14 +69,14 @@ export default async function handler(req, res) {
       // 0 means fail
       let attempts = parseInt(body.success) ? parseInt(body.attempts) : 0;
       data[key][attempts] += 1;
-      const url =
-        'https://api.countapi.xyz/hit/pyccy/' +
-        KEY_PREFIX +
-        key +
-        '-' +
-        attempts;
+      // const url =
+      //   'https://api.countapi.xyz/hit/pyccy/' +
+      //   KEY_PREFIX +
+      //   key +
+      //   '-' +
+      //   attempts;
 
-      await fetch(url);
+      // await fetch(url);
       res.statusCode = 200;
       res.send({ status: 200 });
       return;
