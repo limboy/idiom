@@ -57,6 +57,8 @@ export default async function handler(req, res) {
     data = {};
   }
 
+  console.log(JSON.stringify(data));
+
   switch (action) {
     case 'guess':
       const body = req.body;
