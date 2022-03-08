@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAppContext } from '../../hooks/useAppContext';
 import copyToClipboard from '../../utils/clipboard';
 import Modal from '../Modal';
+import useSWR from 'swr';
+import Statistics from '../Statistics';
 
 function Answer(props) {
   let { config } = useAppContext();
@@ -171,12 +173,12 @@ function NextRound(props) {
 }
 
 export default function Result(props) {
-  // const { startTs } = useAppContext();
-  // const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  // const { data: result } = useSWR(
-  //   '/api/main?action=fetch&key=' + startTs,
-  //   fetcher
-  // );
+  const { startTs } = useAppContext();
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const { data: result } = useSWR(
+    '/api/main?action=fetch&key=' + startTs,
+    fetcher
+  );
   let { status } = useAppContext();
   let [isOpen, setIsOpen] = useState(false);
 
@@ -198,7 +200,6 @@ export default function Result(props) {
       {status === 'WIN' && <Share />}
       <NextRound />
 
-      {/*
       {result && result.data ? (
         <>
           <hr className="border-solide border-t border-gray-300 w-40 mt-3" />
@@ -207,7 +208,6 @@ export default function Result(props) {
       ) : (
         ''
       )}
-      */}
     </Modal>
   );
 }
