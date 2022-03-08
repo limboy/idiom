@@ -26,6 +26,8 @@ export default async function handler(req, res) {
   const key = req.query.key;
   let data = {};
 
+  console.log(KEY_PREFIX, TOKEN_ALGORITHM);
+
   if (!key) {
     res.statusCode = 400;
     res.send({ status: 400 });
@@ -54,7 +56,7 @@ export default async function handler(req, res) {
   switch (action) {
     case 'guess':
       const body = req.body;
-      if (!body.attempts || !checkValid(req.query.token, key)) {
+      if (!body || !body.attempts || !checkValid(req.query.token, key)) {
         res.statusCode = 400;
         res.send({ status: 400 });
         return;
