@@ -61,7 +61,9 @@ function Distribution(props) {
                 }%, #e5e7eb ${(statistics[i] / maxCount) * 100}%)`,
               }}
             ></div>
-            <div className="grow-[1] pl-2">{statistics[i]}</div>
+            <div className="grow-[1] text-center max-w-[2rem]">
+              {statistics[i]}
+            </div>
           </div>
         );
       })}
