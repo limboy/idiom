@@ -173,13 +173,13 @@ function NextRound(props) {
 }
 
 export default function Result(props) {
+  const { status } = useAppContext();
   const { startTs } = useAppContext();
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
   const { data: result } = useSWR(
-    '/api/main?action=fetch&key=' + startTs,
+    status ? '/api/main?action=fetch&key=' + startTs : null,
     fetcher
   );
-  let { status } = useAppContext();
   let [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
