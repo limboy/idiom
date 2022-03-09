@@ -14,7 +14,7 @@ const Letter = (props) => {
 
   function _textColor() {
     return Number.isInteger(props.checkResult)
-      ? 'text-gray-100'
+      ? 'text-gray-50'
       : 'text-gray-600';
   }
 
@@ -33,7 +33,7 @@ const Letter = (props) => {
     }, props.animationDelay);
     setTimeout(() => {
       ref.current.dataset.animation = 'flip-out';
-      ref.current.classList.remove('text-gray-100');
+      ref.current.classList.remove('text-gray-50');
       ref.current.classList.remove('bg-gray-200');
       ref.current.classList.add(_bgColor());
       ref.current.classList.add(_textColor());

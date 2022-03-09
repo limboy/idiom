@@ -120,7 +120,7 @@ export default function Board(props) {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col justify-between flex-1">
+    <div className="w-full max-w-2xl mx-auto flex flex-col justify-between flex-1 font-semibold">
       <div className="w-full h-full min-h-[48px] flex items-center justify-center ">
         <HiOutlineLightBulb
           className="w-8 h-8 text-gray-400 hover:text-gray-800 cursor-pointer"
