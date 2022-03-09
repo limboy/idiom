@@ -115,7 +115,6 @@ export default function Idiom(props) {
             }}
           >
             {letters.split('').map((letter, j) => {
-              nthLetter++;
               let checkResult = null;
               if (props.checkResult) {
                 checkResult = parseInt(props.checkResult[i].charAt(j));
