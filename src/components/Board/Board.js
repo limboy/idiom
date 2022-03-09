@@ -1,7 +1,7 @@
 import { useAppContext } from '../../hooks/useAppContext';
 import { HiOutlineLightBulb } from 'react-icons/hi';
 import Idiom from './Idiom';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Modal from '../Modal';
 import { BsDash, BsSlash, BsChevronDown } from 'react-icons/bs';
 
@@ -90,7 +90,16 @@ function Tip(props) {
 export default function Board(props) {
   let { attempts, config } = useAppContext();
   let [modalIsOpen, setModalIsOpen] = useState(false);
+  let historyRef = useRef(attempts.history);
+  useEffect(() => {
+    historyRef.current = attempts.history;
+  }, [attempts.history]);
   let idioms = [];
+
+  let justGuessed =
+    attempts.history.length === historyRef.current.length
+      ? -1
+      : attempts.history.length - 1;
 
   for (let i = 0; i < config.maxAttempts; i++) {
     if (i < attempts.history.length) {
@@ -134,6 +143,7 @@ export default function Board(props) {
               nthAttempt={i + 1}
               letters={idiom.letters}
               checkResult={idiom.checkResult}
+              justGuessed={justGuessed === i}
             />
           );
         })}
