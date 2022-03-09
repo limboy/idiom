@@ -69,8 +69,6 @@ export default function Idiom(props) {
   let guessValidCheckResult = attempts.current.checkResult;
   let lettersLengthes = props.letters.map((item) => item.length);
   let lettersLength = lettersLengthes.reduce((p, c) => p + c, 0);
-  let nthLetter = 0;
-  console.log(props.checkResult);
   let allRight = props.checkResult
     ? props.checkResult
         .join('')
