@@ -2,8 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAppContext } from '../../hooks/useAppContext';
 import copyToClipboard from '../../utils/clipboard';
 import Modal from '../Modal';
-import useSWR from 'swr';
-import Statistics from '../Statistics';
 
 function Answer(props) {
   let { config } = useAppContext();
@@ -174,12 +172,6 @@ function NextRound(props) {
 
 export default function Result(props) {
   const { status } = useAppContext();
-  const { startTs } = useAppContext();
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  const { data: result } = useSWR(
-    status ? '/api/main?action=fetch&key=' + startTs : null,
-    fetcher
-  );
   let [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -199,15 +191,6 @@ export default function Result(props) {
       <Attempts />
       {status === 'WIN' && <Share />}
       <NextRound />
-
-      {result && result.data ? (
-        <>
-          <hr className="border-solide border-t border-gray-300 w-40 mt-3" />
-          <Statistics statistics={result.data} />
-        </>
-      ) : (
-        ''
-      )}
     </Modal>
   );
 }
