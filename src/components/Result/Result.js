@@ -88,7 +88,7 @@ function Share(props) {
     let currentDay = ('0' + currentDate.getDate()).slice(-2);
     let currentHour = ('0' + currentDate.getHours()).slice(-2);
     let text = [
-      `pinyincaichengyu.com ${currentMonth}/${currentDay}/${currentYear} ${currentHour}`,
+      `idiom.limboy.me ${currentMonth}/${currentDay}/${currentYear} ${currentHour}`,
       '',
     ];
     attempts.history.forEach((attempt, index) => {

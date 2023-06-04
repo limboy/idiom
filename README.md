@@ -1,6 +1,6 @@
 ## 简介
 
-[拼音猜成语](https://pinyincaichengyu.com)是一个受 [Wordle](https://www.nytimes.com/games/wordle/index.html) 启发的一个中文成语小游戏，通过输入拼音组合，结合系统给出的提示来一步步猜测给定的成语。
+[拼音猜成语](https://idiom.limboy.me)是一个受 [Wordle](https://www.nytimes.com/games/wordle/index.html) 启发的一个中文成语小游戏，通过输入拼音组合，结合系统给出的提示来一步步猜测给定的成语。
 ![](design/components.jpg)
 
 ## 技术栈
